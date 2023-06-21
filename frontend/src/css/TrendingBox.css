@@ -1,0 +1,23 @@
+@media screen and (-webkit-min-device-pixel-ratio: 0) and (min-resolution: 0.001dpcm) {
+    div:not(*:root) {
+        .trending {
+            position: fixed;
+            bottom: 33.5%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            text-align: center;
+            opacity: 0.9;
+        }
+    }
+}
+
+.trending {
+    position: fixed;
+    bottom: 38%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    text-align: center;
+    opacity: 0.9;
+}

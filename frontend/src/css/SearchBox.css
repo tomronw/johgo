@@ -1,0 +1,94 @@
+.searchBox {
+    width: 40%;
+    background-color: #222;
+    padding: 10px;
+    border-radius: 15px;
+    animation: slide-in 0.5s forwards;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0.5;
+    transition: opacity 1s;
+    border-color: white;
+}
+
+@media (max-width: 768px) {
+    .searchBox {
+        width: 70%;
+        background-color: #222;
+        padding: 10px;
+        border-radius: 15px;
+        animation: slide-in 0.5s forwards;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        opacity: 0.5;
+        transition: opacity 1s;
+        border-color: white;
+    }
+}
+
+.searchBox .MuiAutocomplete-inputRoot {
+
+    border-color: white;
+    color: white;
+}
+
+.searchBox .MuiFormLabel-root {
+    border-color: white;
+
+    color: white;
+}
+
+.top-search-box {
+    width: 400px;
+    background-color: #222;
+    padding: 9px;
+    border-radius: 15px;
+    animation: slide-in 0.5s forwards;
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: opacity 1s;
+    border-color: white;
+    opacity: 0.8;
+    top: 135px;
+}
+
+.top-search-box .MuiAutocomplete-inputRoot {
+
+    border-color: white;
+    color: white;
+}
+
+.top-search-box .MuiFormLabel-root {
+    border-color: white;
+
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .top-search-box {
+        width: 300px;
+        background-color: #222;
+        padding: 9px;
+        border-radius: 15px;
+        animation: slide-in 0.5s forwards;
+        position: fixed;
+        left: 50%;
+        transform: translateX(-50%);
+        transition: opacity 1s;
+        border-color: white;
+        opacity: 0.8;
+    }
+}
+.search-box-position{
+    position: fixed;
+    top: 13.5%;
+}
+@media (max-width: 768px) {
+    .search-box-position{
+        position: fixed;
+        top: 20%;
+    }
+}

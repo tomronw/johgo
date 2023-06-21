@@ -1,0 +1,15 @@
+frontend/node_modules/*
+backend/config/config.go
+backend/.env
+/backend/internal/core/logs/api/*.log
+/backend/internal/core/logs/engine/*.log
+.idea
+frontend/.idea
+frontend/node_modules
+frontend/nohup.out
+backend/nohup.out
+backend/cmd/backend
+frontend/build/
+.DS_Store
+.history/
+frontend/.env

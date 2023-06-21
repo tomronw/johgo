@@ -1,0 +1,60 @@
+@media screen and (-webkit-min-device-pixel-ratio: 0) and (min-resolution: 0.001dpcm) {
+    div:not(*:root) {
+        .logo-container {
+            width: 100vw;
+            display: flex;
+            left: 5%;
+            position: fixed;
+            margin-top: 2.5%;
+            justify-content: center;
+            align-items: center;
+            animation-name: drop-down;
+            animation-duration: 0.5s;
+            animation-timing-function: ease-out;
+            animation-fill-mode: forwards;
+        }
+    }
+}
+
+
+.logo-container {
+    width: 100vw;
+    display: flex;
+    left: 4.5%;
+    position: fixed;
+    margin-top: 2.5%;
+    justify-content: center;
+    align-items: center;
+    animation-name: drop-down;
+    animation-duration: 0.5s;
+    animation-timing-function: ease-out;
+    animation-fill-mode: forwards;
+}
+
+@media (max-width: 768px) {
+    .logo-container {
+        display: flex;
+        width: 70%;
+        left: 13%;
+        position: fixed;
+        margin-top: 10%;
+        justify-content: center;
+        align-items: center;
+        animation-name: drop-down;
+        animation-duration: 0.5s;
+        animation-timing-function: ease-out;
+        animation-fill-mode: forwards;
+    }
+}
+
+@keyframes drop-down {
+    0% {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}

@@ -1,0 +1,27 @@
+.fish-flap {
+    animation: fish-flap 1s ease-in-out infinite;
+}
+
+@keyframes fish-flap {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    50% {
+        transform: rotate(-20deg);
+    }
+
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+.not-found-text {
+    margin-top: -20px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: white;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+        sans-serif;
+}
