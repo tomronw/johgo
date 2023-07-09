@@ -7,9 +7,9 @@ import (
 	"testing"
 )
 
-func TestWooScrape(t *testing.T) {
+func TestWpScrape(t *testing.T) {
 
-	res, err := http.Get("https://www.langdengames.co.uk//page/1/?s=pokemon&post_type=product")
+	res, err := http.Get("https://cardgalaxy.co.uk/page/1/?s=pokemon")
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -19,8 +19,11 @@ func TestWooScrape(t *testing.T) {
 	if err != nil {
 		fmt.Println(err)
 	}
+	print("scraping\n")
 
-	doc.Find(".product.type-product").Each(func(i int, s *goquery.Selection) {
+	doc.Find(".ast-grid-common-col.ast-full-width").Each(func(i int, s *goquery.Selection) {
+
+		fmt.Println("here")
 
 		href, exists := s.Find(".woocommerce-LoopProduct-link.woocommerce-loop-product__link").Attr("href")
 		if exists {

@@ -1,7 +1,7 @@
 @media screen and (-webkit-min-device-pixel-ratio: 0) and (min-resolution: 0.001dpcm) {
     div:not(*:root) {
         .trending {
-            position: fixed;
+            position: relative;
             bottom: 33.5%;
             left: 50%;
             transform: translate(-50%, -50%);
@@ -13,7 +13,7 @@
 }
 
 .trending {
-    position: fixed;
+    position: relative;
     bottom: 38%;
     left: 50%;
     transform: translate(-50%, -50%);
