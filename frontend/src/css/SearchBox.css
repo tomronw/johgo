@@ -4,8 +4,8 @@
     padding: 10px;
     border-radius: 15px;
     animation: slide-in 0.5s forwards;
-    position: absolute;
-    left: 50%;
+    position: relative;
+    left: 20%;
     transform: translateX(-50%);
     opacity: 0.5;
     transition: opacity 1s;
