@@ -6,11 +6,13 @@ import (
 	"johgo-search-engine/api/logger"
 	"johgo-search-engine/elastic"
 	"net/http"
+	"strconv"
 )
 
 var (
 	EmptyQueryError = "Empty query provided"
 	ECClientError   = "Error with EC client query"
+	NoneBool        = "Singles query parameter must be a boolean"
 )
 
 type APIResponse struct {
@@ -43,6 +45,19 @@ func ReturnQueryResults(rw http.ResponseWriter, r *http.Request) {
 	}
 
 	q := r.URL.Query().Get("query")
+	b := r.URL.Query().Get("filter_singles")
+	includeSingles, err := strconv.ParseBool(b)
+	if err != nil {
+		rw.WriteHeader(http.StatusForbidden)
+		rw.Header().Set("Content-Type", "application/json")
+		e := APIResponse{
+			Success: false,
+			Error:   NoneBool,
+		}
+		json.NewEncoder(rw).Encode(e)
+
+		return
+	}
 
 	if q == "" {
 		rw.WriteHeader(http.StatusForbidden)
@@ -57,7 +72,7 @@ func ReturnQueryResults(rw http.ResponseWriter, r *http.Request) {
 	}
 
 	logger.ApiInfoLogger.Printf("Getting search query: [%s] for %s", q, r.Host)
-	err, successful, result := ec.Query(q)
+	err, successful, result := ec.Query(q, includeSingles)
 
 	if err != nil || !successful {
 		rw.WriteHeader(http.StatusInternalServerError)

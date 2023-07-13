@@ -7,6 +7,8 @@ import { useContext } from 'react';
 import SearchContext from "../context/SearchContext";
 import { useFetchSearchSuggestions } from "./SearchSuggestions";
 import TrendingBoxes from "./TrendingSearchesBox";
+import CardsCheckbox from "./CardsCheckbox";
+
 
 
 function HomeSearchBox() {
@@ -19,6 +21,11 @@ function HomeSearchBox() {
     const { fetchProducts } = useContext(SearchContext)
 
     const [searchValue, setSearchValue] = React.useState('');
+    const [checked, setChecked] = React.useState(true);
+    const handleChange = (event) => {
+        setChecked(event.target.checked);
+        //console.log(checked)
+    };
 
     const isMobile = window.innerWidth <= 768;
 
@@ -30,18 +37,17 @@ function HomeSearchBox() {
                 toast.error('Please enter a search query.');
             } else if (searchValue.toLowerCase() === 'pokemon' || searchValue.length < 2) {
                 toast.error('Please try to be more specific! I.E. "booster box" or "elite trainer box" ');
-
             } else {
-                fetchProducts(searchValue)
-
+                fetchProducts(searchValue, checked)
             }
         }
     };
 
-
     return (
+
         <div>
             <Toaster closeButton offset="50px" position="bottom-center" />
+
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', color: 'white', opacity: 0.6, position: 'relative', paddingTop: isMobile ? '35%' : '18%' }}>
                 <Autocomplete
                     freeSolo
@@ -59,6 +65,9 @@ function HomeSearchBox() {
                     className="searchBox"
                     onInputChange={handleInputChange}
                 />
+            </div>
+            <div >
+                {!isMobile ? <CardsCheckbox checked={checked} handleChange={handleChange} /> : null}
             </div>
             <div>
                 {!isMobile ? <TrendingBoxes trendingTopics={SearchSuggestions} /> : null}

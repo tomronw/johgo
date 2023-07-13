@@ -12,6 +12,14 @@
     border-color: white;
 }
 
+.exclude-box {
+    margin-top: -2%;
+    margin-bottom: 4%;
+    width: 17%;
+    opacity: 0.9;
+    border-color: white;
+}
+
 @media (max-width: 768px) {
     .searchBox {
         width: 70%;
@@ -82,12 +90,14 @@
         opacity: 0.8;
     }
 }
-.search-box-position{
+
+.search-box-position {
     position: fixed;
     top: 13.5%;
 }
+
 @media (max-width: 768px) {
-    .search-box-position{
+    .search-box-position {
         position: fixed;
         top: 20%;
     }

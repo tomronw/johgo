@@ -15,14 +15,14 @@ export const SearchProvider = ({ children }) => {
     const [state, dispatch] = useReducer(searchReducer, initialState)
 
 
-    const fetchProducts = async (query) => {
+    const fetchProducts = async (query, checked) => {
         clearProducts()
         setLoading()
         const APIENDPOINT = process.env.REACT_APP_APIENDPOINT;
 
 
         try {
-            const response = await fetch(`${APIENDPOINT}/v1/search?query=${query.toString()}`, {
+            const response = await fetch(`${APIENDPOINT}/v1/search?query=${query.toString()}&filter_singles=${checked.toString()}`, {
                 headers: {
                     "content-type": "application/json"
                 }

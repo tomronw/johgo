@@ -19,6 +19,7 @@ import (
 	"net"
 	"net/http"
 	"os"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -336,7 +337,7 @@ func (ec ElasticEngineClient) IndexResults(scrapedProducts chan IndexChannel, ct
 
 // For the api to call, processes frontend query
 
-func (ec ElasticEngineClient) Query(query string) (e error, successful bool, results []byte) {
+func (ec ElasticEngineClient) Query(query string, filterSingles bool) (e error, successful bool, results []byte) {
 
 	var ps []ElasticProduct
 	pulledProducts := ProductsToStore{Products: ps}
@@ -381,6 +382,11 @@ func (ec ElasticEngineClient) Query(query string) (e error, successful bool, res
 				pulledProducts.Products = append(pulledProducts.Products, productStorageModel)
 			}
 		}
+
+		if filterSingles {
+			pulledProducts = FilterSingleCards(pulledProducts)
+		}
+
 		jsonData, err := json.Marshal(pulledProducts)
 		if err != nil {
 			logger.ApiErrorLogger.Printf("%s: %s", ErrorParsingBody, err.Error())
@@ -410,6 +416,24 @@ func (ec ElasticEngineClient) Query(query string) (e error, successful bool, res
 
 	}
 	return
+}
+
+func FilterSingleCards(products ProductsToStore) ProductsToStore {
+
+	var filteredProducts ProductsToStore
+	for _, product := range products.Products {
+
+		match, err := regexp.MatchString("[a-zA-Z]{0,2}[0-9]{1,3}/[a-zA-Z]{0,2}[0-9]{1,3}|[a-zA-Z]{0,2}[0-9]{1,3}\\s/\\s[a-zA-Z]{0,2}[0-9]{1,3}", product.Title)
+		if err != nil {
+			core.ErrorLogger.Printf("Error matching regex: %s", err.Error())
+			return products
+		}
+		if !match {
+			filteredProducts.Products = append(filteredProducts.Products, product)
+		}
+	}
+
+	return filteredProducts
 }
 
 func JsonStruct(product ElasticProduct) string {
