@@ -8,11 +8,13 @@
 
 # About
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-yellow)](https://opensource.org/license/apache-2-0/) <br />
-JohGo is a free, open-source, search engine for UK Pokémon TCG products. I had the idea whilst trawling through endless Google pages of out of stock products. Written with a mix of React/Go, it utilises ElasticSearch to hold the data from the scrapes.
+JohGo is a free, open-source, search engine for UK Pokémon TCG products. I had the idea whilst trawling through endless
+Google pages of out of stock products. Written with a mix of React/Go, it utilises ElasticSearch to hold the data from
+the scrapes.
 
 - [View the site here!](https://johgo.xyz)
-- Currently scraping 60~ UK sites returning on average 8000-8500 products
-- Filters out most garbage on the backend.
+- Currently scraping 70~ UK sites returning on average 12000-13000 products
+- Filters out most mystery box/joblot garbage on the backend with the option to filter out single cards.
 - Gets top trending search terms from the web.
 - Feel free to use as a blueprint for your own project!
  

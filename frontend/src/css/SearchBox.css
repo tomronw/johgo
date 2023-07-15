@@ -12,12 +12,25 @@
     border-color: white;
 }
 
+@keyframes slideInFromLeft {
+    0% {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateX(0);
+        opacity: 0.9;
+    }
+}
+
 .exclude-box {
     margin-top: -2%;
     margin-bottom: 4%;
     width: 17%;
     opacity: 0.9;
     border-color: white;
+    animation: slideInFromLeft 0.5s ease-out forwards;
 }
 
 @media (max-width: 768px) {

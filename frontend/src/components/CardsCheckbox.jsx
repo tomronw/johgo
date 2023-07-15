@@ -9,7 +9,7 @@ function CardsCheckbox({ checked, handleChange }) {
 
 
     return (
-        <Tooltip title="Reduces spam by filtering out single cards from search results." placement="left">
+        <Tooltip title="Attempts to filter out all single cards from the search results." placement="left">
             <FormControlLabel
                 control={<Switch checked={checked} onChange={handleChange} />}
                 label="Exclude Single Cards"

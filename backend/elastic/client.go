@@ -7,11 +7,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/elastic/go-elasticsearch/v8"
-	"github.com/elastic/go-elasticsearch/v8/esapi"
-	"github.com/elastic/go-elasticsearch/v8/esutil"
-	"github.com/joho/godotenv"
-	"github.com/labstack/gommon/log"
 	"io"
 	"johgo-search-engine/api/logger"
 	"johgo-search-engine/config"
@@ -23,6 +18,12 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/elastic/go-elasticsearch/v8"
+	"github.com/elastic/go-elasticsearch/v8/esapi"
+	"github.com/elastic/go-elasticsearch/v8/esutil"
+	"github.com/joho/godotenv"
+	"github.com/labstack/gommon/log"
 )
 
 // Client for all elasticsearch calls
@@ -43,6 +44,7 @@ var (
 	ErrorGettingResponse    = "Error getting response from elastic"
 	ErrorParsingBody        = "Error parsing body from elastic"
 	ErrorDeletingIndex      = "Error deleting index"
+	negativeWords           = []string{"mystery", "joblot", "bulk", "paperback"}
 )
 
 type ElasticEngineClient struct {
@@ -127,7 +129,7 @@ func (ec ElasticEngineClient) BulkAddProducts(scrapedProducts chan IndexChannel,
 
 		for _, product := range siteResults.ReturnProduct.Products {
 
-			if !strings.Contains(strings.ToLower(product.Title), "mystery") {
+			if !containsAny(product.Title) {
 
 				p, _ := json.Marshal(product)
 
@@ -307,7 +309,7 @@ func (ec ElasticEngineClient) IndexResults(scrapedProducts chan IndexChannel, ct
 
 		for _, product := range siteResults.ReturnProduct.Products {
 
-			if !strings.Contains(strings.ToLower(product.Title), "mystery") {
+			if !containsAny(product.Title) {
 				pulledP := ElasticProduct{
 					Title:    product.Title,
 					Price:    product.Price,
@@ -423,17 +425,30 @@ func FilterSingleCards(products ProductsToStore) ProductsToStore {
 	var filteredProducts ProductsToStore
 	for _, product := range products.Products {
 
-		match, err := regexp.MatchString("[a-zA-Z]{0,2}[0-9]{1,3}/[a-zA-Z]{0,2}[0-9]{1,3}|[a-zA-Z]{0,2}[0-9]{1,3}\\s/\\s[a-zA-Z]{0,2}[0-9]{1,3}", product.Title)
+		match, err := regexp.MatchString("[a-zA-Z]{0,2}[0-9]{1,3}/[a-zA-Z]{0,2}[0-9]{1,3}|[a-zA-Z]{0,2}[0-9]{1,3}\\s/\\s[a-zA-Z]{0,2}[0-9]{1,3}|[a-zA-Z]{0,2}[0-9]{3}", product.Title)
 		if err != nil {
 			core.ErrorLogger.Printf("Error matching regex: %s", err.Error())
 			return products
 		}
+
 		if !match {
+			filteredProducts.Products = append(filteredProducts.Products, product)
+		} else if strings.Contains(product.Title, "151") {
 			filteredProducts.Products = append(filteredProducts.Products, product)
 		}
 	}
 
 	return filteredProducts
+}
+
+func containsAny(s string) bool {
+
+	for _, substr := range negativeWords {
+		if strings.Contains(strings.ToLower(s), substr) {
+			return true
+		}
+	}
+	return false
 }
 
 func JsonStruct(product ElasticProduct) string {

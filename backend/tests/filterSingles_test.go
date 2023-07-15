@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"johgo-search-engine/internal/core"
 	"regexp"
 	"testing"
 )
@@ -10,7 +11,7 @@ func TestFilterNames(t *testing.T) {
 	names := []string{
 		"test 1/1",
 		"test 22/22",
-		"test 333/333",
+		"Pokemon Glastier (Holo) Lost Abyss s11 034/100",
 		"normal name",
 		"other normal name",
 	}
@@ -20,18 +21,15 @@ func TestFilterNames(t *testing.T) {
 		"other normal name",
 	}
 
-	regexPattern := `[0-9]{1,3}/[0-9]{1,3}`
-	regex, err := regexp.Compile(regexPattern)
-
-	if err != nil {
-		t.Fatalf("Error compiling regex: %v", err)
-	}
-
 	var filteredNames []string
 	for _, name := range names {
-		if !regex.MatchString(name) {
-			filteredNames = append(filteredNames, name)
+		match, err := regexp.MatchString("[a-zA-Z]{0,2}[0-9]{1,3}/[a-zA-Z]{0,2}[0-9]{1,3}|[a-zA-Z]{0,2}[0-9]{1,3}\\s/\\s[a-zA-Z]{0,2}[0-9]{1,3}", name)
+		if err != nil {
+			core.ErrorLogger.Printf("Error matching regex: %s", err.Error())
+		}
+		if !match {
 			fmt.Println(name)
+			filteredNames = append(filteredNames, name)
 		}
 	}
 
