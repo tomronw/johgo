@@ -24,7 +24,6 @@ function HomeSearchBox() {
     const [checked, setChecked] = React.useState(true);
     const handleChange = (event) => {
         setChecked(event.target.checked);
-        //console.log(checked)
     };
 
     const isMobile = window.innerWidth <= 768;

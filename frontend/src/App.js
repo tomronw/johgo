@@ -6,14 +6,22 @@ import Search from './pages/Search';
 import Footer from './components/Footer';
 import { SearchProvider } from './context/SearchContext'
 import NotFound from './pages/NotFound';
+import { useState } from 'react';
 
 function App() {
 
+  const [isLightMode, setIsLightMode] = useState(false);
+
+  const handleLightModeChange = (newMode) => {
+    setIsLightMode(newMode);
+  };
+
+
   return (
     <SearchProvider>
-      <div className="start-bg">
+      <div className={isLightMode ? 'dark-bg' : 'light-bg'}>
         <div className="App">
-          <MainAppBar />
+          <MainAppBar setLightMode={handleLightModeChange} />
           <Routes>
             <Route exact path="/" element={<Search />}>
             </Route>

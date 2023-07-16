@@ -3,7 +3,7 @@
         .logo-container {
             width: 100vw;
             display: flex;
-            left: 5%;
+            left: 1.5%;
             position: fixed;
             margin-top: 2.5%;
             justify-content: center;
@@ -20,7 +20,7 @@
 .logo-container {
     width: 100vw;
     display: flex;
-    left: 4.5%;
+    left: 1.5%;
     position: fixed;
     margin-top: 2.5%;
     justify-content: center;
@@ -57,4 +57,9 @@
         transform: translateY(0);
         opacity: 1;
     }
+}
+
+dark-mode-switch {
+    position: relative;
+    display: flex;
 }

@@ -6,6 +6,7 @@ import "typeface-cormorant";
 import '../css/Index.css'
 import logo from '../images/johgoLogo.png'
 import '../css/Logo.css'
+import DarkModeSwitch from './DarkToggle';
 
 const theme = createTheme({
     typography: {
@@ -36,13 +37,22 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-function MainAppBar() {
+function MainAppBar({ setLightMode }) {
+
     const classes = useStyles();
+
+    const changeLightMode = (newMode) => {
+        setLightMode(newMode);
+    }
+
 
     return (
         <ThemeProvider theme={theme} className="body">
             <AppBar position="static" elevation={0} style={{ background: 'transparent', boxShadow: 'none', fontWeight: 'bold' }} className="body">
                 <Toolbar>
+                    <div>
+                        <DarkModeSwitch changeLightMode={changeLightMode} />
+                    </div>
                     <div style={{
                         position: 'relative',
                     }} className="logo-container">
