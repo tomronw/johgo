@@ -51,7 +51,7 @@ function MainAppBar({ setLightMode }) {
             <AppBar position="static" elevation={0} style={{ background: 'transparent', boxShadow: 'none', fontWeight: 'bold' }} className="body">
                 <Toolbar>
                     <div>
-                        <DarkModeSwitch changeLightMode={changeLightMode} />
+                        {!isMobile ? <DarkModeSwitch changeLightMode={changeLightMode} /> : null}
                     </div>
                     <div style={{
                         position: 'relative',

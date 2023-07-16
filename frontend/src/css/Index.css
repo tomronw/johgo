@@ -28,7 +28,7 @@
 }
 
 @media (max-width: 768px) {
-  .start-bg {
+  .light-bg {
     background: url('../images/phonebackground.jpg');
     background-attachment: fixed;
     background-color: #343232;
