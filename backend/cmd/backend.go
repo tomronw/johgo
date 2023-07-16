@@ -11,8 +11,6 @@ import (
 
 var wgMain sync.WaitGroup
 
-// Launch whole johgo-search-engine
-
 func main() {
 	// go build ./backend.go
 	// launch all scrapers

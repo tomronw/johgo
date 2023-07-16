@@ -28,7 +28,7 @@ function ProductSearchBar() {
 
             } else {
                 // console.log('Will start search process with: ', searchValue)
-                fetchProducts(searchValue)
+                fetchProducts(searchValue, false)
 
             }
         }

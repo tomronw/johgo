@@ -7,7 +7,7 @@
 }
 
 
-.start-bg {
+.light-bg {
   background: url('../images/pokemonbackground.jpg');
   background-attachment: fixed;
   background-color: #343232;
@@ -17,8 +17,18 @@
   background-size: cover;
 }
 
+.dark-bg {
+  background: url('../images/dark_background.jpg');
+  background-attachment: fixed;
+  background-color: #343232;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  margin: 0;
+  background-size: cover;
+}
+
 @media (max-width: 768px) {
-  .start-bg {
+  .light-bg {
     background: url('../images/phonebackground.jpg');
     background-attachment: fixed;
     background-color: #343232;
