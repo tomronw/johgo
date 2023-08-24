@@ -54,3 +54,8 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.dark-mode-switch {
+  top: 30%;
+  right: 40%;
+}

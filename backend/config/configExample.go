@@ -21,5 +21,11 @@ var (
 	ExampleToysLink                   = "toysurl"
 	ExampleSitesAPIURL                = "sitesApiUrl"
 	ExampleShopifyE                   = "shopEndpoint"
-	ExampleWooEP                      = "wooendpoint"
+	ExampleEmailURI                   = "1448e09b-6514-4cd0-8a79-913db0ddf0ect"
+	ExampleWooEP                      = "/?s=pokemon&post_type=product"
+	ExampleHeader                     = "cf"
+	ExampleHeaderVal                  = "706dd4d8-11e7-429e-9604-a24874157fad"
+	// in minutes
+	ExampleHealthInterval = 30
+	ExampleSitename       = "mysite"
 )

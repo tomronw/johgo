@@ -8,6 +8,7 @@ import logo from '../images/johgoLogo.png'
 import '../css/Logo.css'
 import DarkModeSwitch from './DarkToggle';
 
+
 const theme = createTheme({
     typography: {
         fontFamily: ['Segoe UI', 'Roboto', 'Oxygen',
@@ -50,7 +51,7 @@ function MainAppBar({ setLightMode }) {
         <ThemeProvider theme={theme} className="body">
             <AppBar position="static" elevation={0} style={{ background: 'transparent', boxShadow: 'none', fontWeight: 'bold' }} className="body">
                 <Toolbar>
-                    <div>
+                    <div className="dark-mode-switch">
                         {!isMobile ? <DarkModeSwitch changeLightMode={changeLightMode} /> : null}
                     </div>
                     <div style={{
