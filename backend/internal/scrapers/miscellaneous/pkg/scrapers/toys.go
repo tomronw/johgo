@@ -110,15 +110,15 @@ func GetToys(site coreModels.Site) (p elastic.ProductsToStore, err error, s stri
 
 					} else {
 						anotherPage = false
-						core.ErrorLogger.Printf("Error parsing body [%s], returning products: %s", site.Name, err)
+						//core.ErrorLogger.Printf("Error parsing body [%s], returning products: %s", site.Name, err)
 						return pulledProducts, err, site.Name
 					}
 					currentPage++
 				} else {
 					retries++
-					core.ErrorLogger.Printf("Banned on: %s, retries left: %d", site.Name, retries)
+					///core.ErrorLogger.Printf("Banned on: %s, retries left: %d", site.Name, retries)
 					if !core.CheckRetries(retries) {
-						core.ErrorLogger.Printf("Retries exceeded on: %s, returning products...", site.Name)
+						//core.ErrorLogger.Printf("Retries exceeded on: %s, returning products...", site.Name)
 						return pulledProducts, err, site.Name
 					}
 					time.Sleep(7 * time.Second)

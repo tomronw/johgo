@@ -12,6 +12,7 @@ import (
 )
 
 func SpawnHealthCheck() {
+	time.Sleep(time.Duration(config.HealthInterval) * time.Minute)
 	for {
 		healthCheckSuccessful, reason := CheckEndpoint()
 		if !healthCheckSuccessful {

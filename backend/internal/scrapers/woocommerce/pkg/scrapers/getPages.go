@@ -82,7 +82,7 @@ func ScrapeWooCommerceSite(site coreModels.Site) (p elastic.ProductsToStore, err
 									productStorageModel.SiteUrl = site.URL
 									pulledProducts.Products = append(pulledProducts.Products, productStorageModel)
 								} else {
-									core.ErrorLogger.Printf("Link not found on site: %s", site.Name)
+									//core.ErrorLogger.Printf("Link not found on site: %s", site.Name)
 									if it == 0 {
 										anotherPage = false
 
@@ -94,15 +94,15 @@ func ScrapeWooCommerceSite(site coreModels.Site) (p elastic.ProductsToStore, err
 
 					} else {
 						anotherPage = false
-						core.ErrorLogger.Printf("Error parsing body [%s], returning products: %s", site.Name, err)
+						//core.ErrorLogger.Printf("Error parsing body [%s], returning products: %s", site.Name, err)
 						return pulledProducts, err, site.Name
 					}
 					currentPage++
 				} else {
 					retries++
-					core.ErrorLogger.Printf("Banned on: %s, retries left: %d", site.Name, retries)
+					//core.ErrorLogger.Printf("Banned on: %s, retries left: %d", site.Name, retries)
 					if !core.CheckRetries(retries) {
-						core.ErrorLogger.Printf("Retries exceeded on: %s, returning products...", site.Name)
+						//core.ErrorLogger.Printf("Retries exceeded on: %s, returning products...", site.Name)
 						return pulledProducts, err, site.Name
 					}
 					time.Sleep(7 * time.Second)
@@ -110,7 +110,7 @@ func ScrapeWooCommerceSite(site coreModels.Site) (p elastic.ProductsToStore, err
 
 			} else {
 
-				core.ErrorLogger.Printf("Error getting response: ", site.Name, err.Error())
+				//core.ErrorLogger.Printf("Error getting response: ", site.Name, err.Error())
 
 				anotherPage = false
 			}

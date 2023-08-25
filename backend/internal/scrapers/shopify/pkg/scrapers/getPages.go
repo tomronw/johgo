@@ -93,9 +93,9 @@ func GetPages(site coreModels.Site) (p elastic.ProductsToStore, err error, s str
 					currentPage++
 				} else {
 					retries++
-					core.ErrorLogger.Printf("Banned on: %s, retries left: %d", site.Name, retries)
+					//core.ErrorLogger.Printf("Banned on: %s, retries left: %d", site.Name, retries)
 					if !core.CheckRetries(retries) {
-						core.ErrorLogger.Printf("Retries exceeded on: %s, returning products...", site.Name)
+						//core.ErrorLogger.Printf("Retries exceeded on: %s, returning products...", site.Name)
 						return pulledProducts, err, site.Name
 					}
 					time.Sleep(7 * time.Second)
