@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import DarkModeToggle from "react-dark-mode-toggle";
-import "../css/Logo.css";
 
 function DarkModeSwitch({ changeLightMode }) {
     const [isLightMode, setLightMode] = useState(false);
@@ -12,7 +11,7 @@ function DarkModeSwitch({ changeLightMode }) {
     };
 
     return (
-        <div className="dark-mode-switch">
+        <div>
             <DarkModeToggle
                 onChange={ModeHandler}
                 checked={isLightMode}
