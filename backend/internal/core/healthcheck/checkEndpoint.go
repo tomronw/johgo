@@ -61,9 +61,6 @@ func CheckEndpoint() (healthCheckSuccessful bool, reason error) {
 			return false, fmt.Errorf("failed to parse json: %v", err.Error())
 		}
 
-		fmt.Println(response.Error)
-		fmt.Println(response.Success)
-
 		if !response.Success || res.StatusCode != http.StatusOK {
 			logger.ApiErrorLogger.Printf("api response indicates failure. Error: %s", response.Error)
 			return false, fmt.Errorf("api response indicates failure. Error: %s", response.Error)
