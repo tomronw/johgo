@@ -26,7 +26,7 @@ func TestSearch(t *testing.T) {
 	}
 
 	ec, err := elasticsearch.NewClient(elasticsearch.Config{
-		Addresses:              []string{"https://localhost:9200/supermarkets"},
+		Addresses:              []string{"https://localhost:9200"},
 		Username:               os.Getenv("ELASTIC_USERNAME"),
 		Password:               os.Getenv("ELASTIC_PASSWORD"),
 		CertificateFingerprint: os.Getenv("ELASTIC_CERT"),
@@ -45,7 +45,7 @@ func TestSearch(t *testing.T) {
 	//minScore := "7"
 	res, err := ec.Search(
 		ec.Search.WithContext(context.Background()),
-		ec.Search.WithBody(strings.NewReader("{ \"from\" : 0, \"size\" : 10000,\"query\": {\"match\": {\"Title\": \"pokemon\"}}}")),
+		ec.Search.WithBody(strings.NewReader("{ \"from\" : 0, \"size\" : 10000,\"query\": {\"match\": {\"title\": \"elite trainer box\"}}}")),
 		//ec.Search.WithBody(strings.NewReader("{ \"from\" : 0, \"size\" : 10000,\"query\": {\"match_phrase\": {\"Title\": \"v box\"}}}")),
 		//ec.Search.WithBody(strings.NewReader("{ \"from\" : 0, \"size\" : 10000,\"query\": {\"match_phrase\": {\"Title.keyword\": {\"query\": \"v box\", \"analyzer\": \"standard\"}}}")),
 		//ec.Search.WithBody(strings.NewReader(fmt.Sprintf("{ \"from\" : 0, \"size\" : 10000, \"min_score\": %s, \"query\": {\"match\": {\"Title\": \"\"}}}", minScore, query))),

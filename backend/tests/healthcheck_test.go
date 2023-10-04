@@ -1,7 +1,7 @@
 package tests
 
 import (
-	"johgo-search-engine/internal/core/healthcheck"
+	"johgo-search-engine/internal/core/healthCheck"
 	"testing"
 )
 
@@ -11,7 +11,7 @@ func TestHealthCheck(t *testing.T) {
 		t.Errorf("error checking endpoint: %v", err.Error())
 	}
 	if !wasSuccessful {
-		t.Errorf("endpoint failed healthcheck!")
+		t.Errorf("endpoint failed health check!")
 	}
 
 }

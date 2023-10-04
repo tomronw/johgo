@@ -1,43 +1,32 @@
-import './css/App.css';
-import MainAppBar from './components/MainAppBar.jsx';
+// App.js
+import React from 'react';
+import { SearchProvider } from './context/SearchContext';
+import { useTheme } from './context/ThemeContext';
 import { Routes, Route } from "react-router-dom";
-import About from './pages/About';
-import Search from './pages/Search';
-import Footer from './components/Footer';
-import { SearchProvider } from './context/SearchContext'
+import Mainbar from './components/toolbar/Mainbar';
+import Home from './pages/Home';
 import NotFound from './pages/NotFound';
-import { useState } from 'react';
-
+import './css/Theme.css';
+import Footer from './components/miscellaneous/Footer';
+import { SuggestionProvider } from './context/SuggestionsContext';
 function App() {
-
-  const [isLightMode, setIsLightMode] = useState(false);
-
-  const handleLightModeChange = (newMode) => {
-    setIsLightMode(newMode);
-  };
-
+  const { darkMode } = useTheme();
 
   return (
     <SearchProvider>
-      <div className={isLightMode ? 'dark-bg' : 'light-bg'}>
-        <div className="App">
-          <MainAppBar setLightMode={handleLightModeChange} />
+      <SuggestionProvider>
+        <div className={`App ${darkMode ? 'dark-mode' : 'light-mode'}`}>
+          <Mainbar />
           <Routes>
-            <Route exact path="/" element={<Search />}>
-            </Route>
-            <Route>
-              <Route path="/about" element={<About />}>
-              </Route>
-            </Route>
-            <Route>
-              <Route path="*" element={<NotFound />} />
-            </Route>
+            <Route exact path="/" element={<Home />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </div>
         <Footer />
-      </div>
+      </SuggestionProvider>
     </SearchProvider>
   );
 }
 
 export default App;
+

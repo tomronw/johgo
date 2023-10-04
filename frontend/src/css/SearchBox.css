@@ -1,15 +1,45 @@
 .searchBox {
-    width: 40%;
     background-color: #222;
     padding: 10px;
-    border-radius: 15px;
-    animation: slide-in 0.5s forwards;
-    position: relative;
-    left: 20%;
-    transform: translateX(-50%);
-    opacity: 0.5;
+    width: 90%;
+    border-radius: 10px;
+    opacity: 0.7;
     transition: opacity 1s;
     border-color: white;
+    color: white;
+}
+
+.search-elements {
+    animation: slideInFromLeft 0.5s forwards;
+}
+
+.autocomplete-paper.MuiAutocomplete-paper {
+    background-color: rgba(0, 0, 0, 0.8);
+    /* Black with some opacity */
+    color: white;
+}
+
+.autocomplete-paper .MuiAutocomplete-option:hover,
+.autocomplete-paper .MuiAutocomplete-option[data-focus='true'] {
+    background-color: rgba(225, 230, 86, 0.2);
+}
+
+.searchBox .MuiAutocomplete-root {
+    width: 100%;
+}
+
+/* Define the default border thickness */
+.searchBox .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+    border-width: 2px;
+}
+
+/* Define border thickness on hover */
+.searchBox .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+    border-width: 2px;
+}
+
+.searchBox .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+    border-width: 2px;
 }
 
 @keyframes slideInFromLeft {
@@ -24,94 +54,49 @@
     }
 }
 
-.exclude-box {
-    margin-top: -2%;
-    margin-bottom: 4%;
-    width: 17%;
-    opacity: 0.9;
-    border-color: white;
-    animation: slideInFromLeft 0.5s ease-out forwards;
+.searchBoxIcon {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    height: 3em;
+    justify-content: center;
+    transition: width 0.4s ease, borderRadius 0.4s ease;
+}
+
+.searchBoxIcon>svg {
+    margin: 0 8px;
+    z-index: 2;
+}
+
+.searchBoxInput {
+    width: 0;
+    opacity: 0;
+    right: 0;
+    z-index: 1;
+}
+
+.searchBoxInputVisible {
+    width: 100%;
+    opacity: 1;
 }
 
 @media (max-width: 768px) {
     .searchBox {
-        width: 70%;
         background-color: #222;
-        padding: 10px;
-        border-radius: 15px;
-        animation: slide-in 0.5s forwards;
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
+        padding: 5px;
+        width: 70%;
+        border-radius: 5px;
         opacity: 0.5;
         transition: opacity 1s;
         border-color: white;
+        color: white;
     }
 }
 
-.searchBox .MuiAutocomplete-inputRoot {
-
-    border-color: white;
-    color: white;
+.smallFont {
+    font-size: 8px;
 }
 
-.searchBox .MuiFormLabel-root {
-    border-color: white;
-
-    color: white;
-}
-
-.top-search-box {
-    width: 400px;
-    background-color: #222;
-    padding: 9px;
-    border-radius: 15px;
-    animation: slide-in 0.5s forwards;
-    position: fixed;
-    left: 50%;
-    transform: translateX(-50%);
-    transition: opacity 1s;
-    border-color: white;
-    opacity: 0.8;
-    top: 135px;
-}
-
-.top-search-box .MuiAutocomplete-inputRoot {
-
-    border-color: white;
-    color: white;
-}
-
-.top-search-box .MuiFormLabel-root {
-    border-color: white;
-
-    color: white;
-}
-
-@media (max-width: 768px) {
-    .top-search-box {
-        width: 300px;
-        background-color: #222;
-        padding: 9px;
-        border-radius: 15px;
-        animation: slide-in 0.5s forwards;
-        position: fixed;
-        left: 50%;
-        transform: translateX(-50%);
-        transition: opacity 1s;
-        border-color: white;
-        opacity: 0.8;
-    }
-}
-
-.search-box-position {
-    position: fixed;
-    top: 13.5%;
-}
-
-@media (max-width: 768px) {
-    .search-box-position {
-        position: fixed;
-        top: 20%;
-    }
+.largeFont {
+    font-size: 16px;
 }

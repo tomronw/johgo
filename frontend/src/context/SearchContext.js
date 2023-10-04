@@ -1,7 +1,6 @@
 import { createContext, useReducer } from 'react';
 import searchReducer from "./SearchReducer";
 
-
 const SearchContext = createContext();
 
 export const SearchProvider = ({ children }) => {
@@ -20,7 +19,6 @@ export const SearchProvider = ({ children }) => {
         setLoading()
         const APIENDPOINT = process.env.REACT_APP_APIENDPOINT;
 
-
         try {
             const response = await fetch(`${APIENDPOINT}/v1/search?query=${query.toString()}&filter_singles=${checked.toString()}`, {
                 headers: {
@@ -34,11 +32,7 @@ export const SearchProvider = ({ children }) => {
             } else {
                 dispatch({ type: "FETCH_PRODUCTS", payload: [{}] })
             }
-
-
         } catch (error) {
-
-
             dispatch({ type: "FETCH_PRODUCTS", payload: [{}] })
         }
     }

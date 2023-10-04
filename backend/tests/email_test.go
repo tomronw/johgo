@@ -2,7 +2,7 @@ package tests
 
 import (
 	"errors"
-	"johgo-search-engine/internal/core/healthcheck"
+	"johgo-search-engine/internal/core/healthCheck"
 	"testing"
 )
 

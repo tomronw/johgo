@@ -28,7 +28,7 @@ func SpawnHealthCheck() {
 				time.Sleep(time.Hour * 3)
 			}
 		} else {
-			logger.ApiInfoLogger.Printf("endpoint healthcheck successful")
+			logger.ApiInfoLogger.Printf("endpoint health check successful")
 		}
 		time.Sleep(time.Duration(config.HealthInterval) * time.Minute)
 	}

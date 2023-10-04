@@ -83,7 +83,7 @@ func CreateClient(index string) (engineClient ElasticEngineClient, e error) {
 			if err == nil {
 
 				defer res.Body.Close()
-				core.InfoLogger.Println("Elastic client started, version: ", elasticsearch.Version)
+				core.InfoLogger.Println("elastic client started, version:", elasticsearch.Version)
 				return ElasticEngineClient{
 					Instance: ec,
 					Index:    index,
@@ -146,7 +146,6 @@ func (ec ElasticEngineClient) BulkAddProducts(scrapedProducts chan IndexChannel,
 							item esutil.BulkIndexerItem,
 							res esutil.BulkIndexerResponseItem,
 						) {
-							//fmt.Printf("[%d] %s test/%s", res.Status, res.Result, item.DocumentID)
 							productsIndexed++
 						},
 
@@ -156,9 +155,9 @@ func (ec ElasticEngineClient) BulkAddProducts(scrapedProducts chan IndexChannel,
 							res esutil.BulkIndexerResponseItem, err error,
 						) {
 							if err != nil {
-								fmt.Printf("ERROR: %s", err)
+								fmt.Printf("error: %s", err)
 							} else {
-								fmt.Printf("ERROR: %s: %s", res.Error.Type, res.Error.Reason)
+								fmt.Printf("error: %s: %s", res.Error.Type, res.Error.Reason)
 							}
 						},
 					},
@@ -346,7 +345,7 @@ func (ec ElasticEngineClient) Query(query string, filterSingles bool) (e error, 
 
 	res, err := ec.Instance.Search(
 		ec.Instance.Search.WithContext(context.Background()),
-		ec.Instance.Search.WithBody(strings.NewReader(fmt.Sprintf("{ \"from\" : 0, \"size\" : 10000, \"min_score\": %s, \"query\": {\"match\": {\"Title\": \"%s\"}}}", ec.MinScore, query))),
+		ec.Instance.Search.WithBody(strings.NewReader(fmt.Sprintf("{ \"from\" : 0, \"size\" : 10000, \"min_score\": %s, \"query\": {\"match\": {\"title\": \"%s\"}}}", ec.MinScore, query))),
 		ec.Instance.Search.WithTrackTotalHits(true),
 		ec.Instance.Search.WithPretty(),
 	)
@@ -365,6 +364,8 @@ func (ec ElasticEngineClient) Query(query string, filterSingles bool) (e error, 
 			logger.ApiErrorLogger.Printf("%s: %s", ErrorParsingBody, err.Error())
 			return err, false, nil
 		}
+
+		core.InfoLogger.Printf("total hits for query [%s]: %d", query, productStruct.Hits.Total.Value)
 
 		for _, hit := range productStruct.Hits.QueryHits {
 			duplicate := false

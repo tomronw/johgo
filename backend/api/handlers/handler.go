@@ -10,9 +10,8 @@ import (
 )
 
 var (
-	EmptyQueryError = "Empty query provided"
-	ECClientError   = "Error with EC client query"
-	NoneBool        = "Singles query parameter must be a boolean"
+	ECClientError = "error with EC client query"
+	NoneBool      = "singles query parameter must be a boolean"
 )
 
 type APIResponse struct {
@@ -46,6 +45,17 @@ func ReturnQueryResults(rw http.ResponseWriter, r *http.Request) {
 
 	q := r.URL.Query().Get("query")
 	b := r.URL.Query().Get("filter_singles")
+	if q == "" || b == "" {
+		rw.WriteHeader(http.StatusBadRequest)
+		rw.Header().Set("Content-Type", "application/json")
+		e := APIResponse{
+			Success: false,
+			Data:    nil,
+			Error:   "bad request params",
+		}
+		json.NewEncoder(rw).Encode(e)
+		return
+	}
 	includeSingles, err := strconv.ParseBool(b)
 	if err != nil {
 		rw.WriteHeader(http.StatusForbidden)
@@ -58,19 +68,6 @@ func ReturnQueryResults(rw http.ResponseWriter, r *http.Request) {
 
 		return
 	}
-
-	if q == "" {
-		rw.WriteHeader(http.StatusForbidden)
-		rw.Header().Set("Content-Type", "application/json")
-		e := APIResponse{
-			Success: false,
-			Error:   EmptyQueryError,
-		}
-		json.NewEncoder(rw).Encode(e)
-
-		return
-	}
-
 	logger.ApiInfoLogger.Printf("Getting search query: [%s] for %s", q, r.Host)
 	err, successful, result := ec.Query(q, includeSingles)
 
@@ -84,7 +81,6 @@ func ReturnQueryResults(rw http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(rw).Encode(e)
 		return
 	} else {
-
 		if len(result) > 25 {
 			rw.WriteHeader(http.StatusOK)
 			rw.Header().Set("Content-Type", "application/json")

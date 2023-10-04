@@ -20,7 +20,6 @@ func ScrapeShopifySites() {
 	ec, _ := elastic.CreateClient(core.Shopify.IndexName)
 
 	for true {
-
 		core.InfoLogger.Printf("Scraping shopify sites")
 
 		shopifySites, err := core.GetStoreList(core.Shopify.ApiRoute)

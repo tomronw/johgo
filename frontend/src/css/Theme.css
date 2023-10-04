@@ -1,0 +1,81 @@
+.dark-mode {
+    background: url('../images/dark_background.jpg');
+    background-attachment: fixed;
+    background-color: #343232;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    margin: 0;
+    background-size: cover;
+}
+
+
+@media (max-width: 768px) {
+    .dark-mode {
+        background: url('../images/dark_phonebackground.jpg');
+        background-attachment: fixed;
+        background-color: #343232;
+        background-position: center;
+        background-repeat: repeat;
+        min-height: 100vh;
+        background-size: cover;
+        margin: 0;
+        overflow-x: hidden;
+    }
+
+}
+
+.dark-mode .MuiSvgIcon-root {
+    color: yellow;
+}
+
+.light-mode {
+    background: url('../images/pokemonbackground.jpg');
+    background-attachment: fixed;
+    background-color: #343232;
+    background-repeat: repeat;
+    min-height: 100vh;
+    background-size: cover;
+    margin: 0;
+    overflow-x: hidden;
+}
+
+@media (max-width: 768px) {
+    .light-mode {
+        background: url('../images/phonebackground.jpg');
+        background-attachment: fixed;
+        background-color: #343232;
+        background-position: center;
+        background-repeat: repeat;
+        min-height: 100vh;
+        background-size: cover;
+        margin: 0;
+        overflow-x: hidden;
+    }
+
+}
+
+.light-mode .MuiSvgIcon-root {
+    color: #bfbfbd;
+}
+
+.dark-mode::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: black;
+    z-index: -1;
+}
+
+.light-mode::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: black;
+    z-index: -1;
+}

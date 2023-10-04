@@ -1,27 +1,25 @@
-import HomeSearchBox from "../components/HomeSearchBox.jsx";
-import SearchResults from "../components/ShowResults.jsx";
-import SearchContext from "../context/SearchContext";
-import Loader from "../components/Loader.jsx";
+import HomeSearchBox from "../components/home/HomeSearchBox.jsx";
+import SearchContext from "../context/SearchContext.js";
+import Loading from "../components/miscellaneous/Loading.jsx";
 import { useContext } from "react";
 import '../css/App.css';
-
+import ShowResults from "../components/results/ShowResults.jsx";
 
 function Home() {
 
     const { products, loading } = useContext(SearchContext)
 
-
     if (!loading) {
         return (
             <div>
                 <div className="App">
-                    {products.length > 0 ? <SearchResults style={{ paddingTop: '60px' }} /> : <HomeSearchBox />}
+                    {products.length > 0 ? <ShowResults /> : <HomeSearchBox />}
                 </div>
             </div>
         )
     } else {
         return (<div className="App" style={{ position: 'relative' }}>
-            <Loader />
+            <Loading />
         </div>)
 
     }

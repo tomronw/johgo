@@ -6,12 +6,12 @@ type ProductsToStore struct {
 	Products []ElasticProduct `json:"products"`
 }
 type ElasticProduct struct {
-	Title    string
-	Price    string
-	Url      string
-	Image    string
-	SiteName string
-	SiteUrl  string
+	Title    string `json:"title"`
+	Price    string `json:"price"`
+	Url      string `json:"url"`
+	Image    string `json:"image"`
+	SiteName string `json:"siteName"`
+	SiteUrl  string `json:"siteUrl"`
 }
 
 type ElasticCreds struct {

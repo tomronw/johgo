@@ -53,6 +53,8 @@ func ScrapeMiscellaneous() {
 					case "ToysRUs":
 						go scrapeToysRUs(site, scrapedProducts)
 						defer wg.Done()
+						//default:
+						//	defer wg.Done()
 					}
 				}()
 
