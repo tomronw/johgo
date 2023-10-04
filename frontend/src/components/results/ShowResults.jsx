@@ -75,7 +75,7 @@ function ShowResults() {
                                 sx={{ paddingY: '12%', paddingX: '4%', marginTop: -3, right: 5 }}>
                                 {products.length > 1 ? (
                                     sortedProducts.slice(0, displayCount).map((product) => (
-                                        <Grid item xs={9} sm={6} md={4} lg={2} xl={1} key={product.url}>
+                                        <Grid item xs={9} sm={4} md={4} lg={2} xl={1} key={product.url}>
                                             <ProductCard key={product.url} product={product} />
                                         </Grid>
                                     ))
@@ -112,7 +112,7 @@ function ShowResults() {
                             >
                                 {products.length > 1 ? (
                                     sortedProducts.slice(0, displayCount).map((product) => (
-                                        <Grid item xs={12} sm={6} md={4} lg={2} xl={1} key={product.url}>
+                                        <Grid item xs={12} sm={6} md={4} lg={2} xl={2} key={product.url}>
                                             <ProductCard key={product.url} product={product} />
                                         </Grid>
                                     ))
