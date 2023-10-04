@@ -53,8 +53,9 @@ func ScrapeMiscellaneous() {
 					case "ToysRUs":
 						go scrapeToysRUs(site, scrapedProducts)
 						defer wg.Done()
-						//default:
-						//	defer wg.Done()
+					case "Chaos Cards":
+						go scrapeChaos(site, scrapedProducts)
+						defer wg.Done()
 					}
 				}()
 
@@ -133,6 +134,18 @@ func scrapeArgos(site coreModels.Site, scrapedProducts chan<- elastic.IndexChann
 func scrapeToysRUs(site coreModels.Site, scrapedProducts chan<- elastic.IndexChannel) {
 
 	productsFound, err, store := scrapers.GetToys(site)
+	siteResults := elastic.IndexChannel{
+		SiteName:      store,
+		ReturnProduct: productsFound,
+		Error:         err,
+	}
+
+	scrapedProducts <- siteResults
+}
+
+func scrapeChaos(site coreModels.Site, scrapedProducts chan<- elastic.IndexChannel) {
+
+	productsFound, err, store := scrapers.GetChaos(site)
 	siteResults := elastic.IndexChannel{
 		SiteName:      store,
 		ReturnProduct: productsFound,
