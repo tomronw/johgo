@@ -13,9 +13,6 @@ import (
 var wgMain sync.WaitGroup
 
 func main() {
-	//TODO:
-	// - Test scrapers again
-
 	// go build backend.go
 	// launch all scrapers
 	wgMain.Add(5)

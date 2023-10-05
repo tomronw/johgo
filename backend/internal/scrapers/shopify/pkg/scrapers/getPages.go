@@ -87,10 +87,13 @@ func GetPages(site coreModels.Site) (p elastic.ProductsToStore, err error, s str
 				}
 
 			} else {
+				if strings.Contains(err.Error(), "context deadline exceeded") {
+					core.ErrorLogger.Printf("timeout error (context deadline exceeded) on site: ", site.Name)
+				} else {
+					core.ErrorLogger.Printf("error getting response: ", site.Name, err.Error())
 
-				core.ErrorLogger.Printf("Error getting response: ", site.Name, err.Error())
-
-				anotherPage = false
+					anotherPage = false
+				}
 			}
 
 		} else {

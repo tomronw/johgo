@@ -9,7 +9,7 @@ import (
 
 func TestWooScrape(t *testing.T) {
 
-	res, err := http.Get("https://bathtcg.co.uk/page/1/?s=pokemon&post_type=product")
+	res, err := http.Get("https://pokeuk.co.uk//page/1/?s=pokemon&post_type=product")
 	if err != nil {
 		fmt.Println(err)
 	}

@@ -8,6 +8,7 @@ import (
 	"johgo-search-engine/internal/core"
 	"johgo-search-engine/internal/core/coreModels"
 	"johgo-search-engine/internal/core/http"
+	"strings"
 	"time"
 )
 
@@ -80,10 +81,10 @@ func GetChaos(site coreModels.Site) (p elastic.ProductsToStore, err error, s str
 									if price == "" {
 										productStorageModel.Price = "0"
 									} else {
-										productStorageModel.Price = price
+										productStorageModel.Price = strings.ReplaceAll(price, "£", "")
 									}
 								} else {
-									productStorageModel.Price = price
+									productStorageModel.Price = strings.ReplaceAll(price, "£", "")
 								}
 								productStorageModel.SiteName = site.Name
 								productStorageModel.SiteUrl = site.URL
