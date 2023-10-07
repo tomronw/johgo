@@ -12,10 +12,16 @@ import { CalendarTwoTone } from '@ant-design/icons';
 function Home() {
     const { products, loading } = useContext(SearchContext);
     const [isCalendarVisible, setIsCalendarVisible] = useState(false);
-
+    const isMobile = window.innerWidth <= 768;
     const { darkMode } = useTheme();
-    var currentTheme
 
+    var calendarMargin
+    var currentTheme
+    if (isMobile) {
+        calendarMargin = "-11%"
+    } else {
+        calendarMargin = '-7%'
+    }
     if (darkMode) {
         currentTheme = theme.darkAlgorithm
     } else {
@@ -34,7 +40,7 @@ function Home() {
                         {products.length > 0 ? <ShowResults /> :
                             <>
                                 <HomeSearchBox />
-                                <div style={{ textAlign: 'center', marginTop: '-7%', animation: 'slideFromBottom 1s forwards' }}>
+                                <div style={{ textAlign: 'center', marginTop: calendarMargin, animation: 'slideFromBottom 1s forwards' }}>
                                     <Popover
                                         content={<ReleaseCalendar />}
                                         title="Pokémon TCG Product Release Calendar"
