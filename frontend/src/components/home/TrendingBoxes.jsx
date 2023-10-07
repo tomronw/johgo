@@ -25,8 +25,8 @@ function TrendingBoxes({ isMobile }) {
                 <Chip style={{ margin: '5px 10px' }} label={suggestions[4].toLowerCase()} onClick={() => handleClick(suggestions[4])} avatar={<TrendingUpIcon />} />
             </div> :
                 <div className="trending">
-                    <Chip style={{ margin: '10px 10px', fontSize: 'x-small' }} label={suggestions[0].toLowerCase()} onClick={() => handleClick(suggestions[2])} avatar={<TrendingUpIcon fontSize="small" />} /><br />
-                    <Chip style={{ margin: '5px 10px', fontSize: 'x-small' }} label={suggestions[1].toLowerCase()} onClick={() => handleClick(suggestions[3])} avatar={<TrendingUpIcon fontSize="small" />} />
+                    <Chip size='small' style={{ margin: '10px 10px', fontSize: 'x-small' }} label={suggestions[0].toLowerCase()} onClick={() => handleClick(suggestions[2])} avatar={<TrendingUpIcon fontSize="small" />} /><br />
+                    <Chip size='small' style={{ margin: '5px 10px', fontSize: 'x-small' }} label={suggestions[1].toLowerCase()} onClick={() => handleClick(suggestions[3])} avatar={<TrendingUpIcon fontSize="small" />} />
                 </div>}
         </div>
     );

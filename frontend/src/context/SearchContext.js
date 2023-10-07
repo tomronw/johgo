@@ -17,10 +17,9 @@ export const SearchProvider = ({ children }) => {
     const fetchProducts = async (query, checked) => {
         clearProducts()
         setLoading()
-        const APIENDPOINT = process.env.REACT_APP_APIENDPOINT;
 
         try {
-            const response = await fetch(`${APIENDPOINT}/v1/search?query=${query.toString()}&filter_singles=${checked.toString()}`, {
+            const response = await fetch(`${process.env.REACT_APP_APIENDPOINT}/search?query=${query.toString()}&filter_singles=${checked.toString()}`, {
                 headers: {
                     "content-type": "application/json"
                 }

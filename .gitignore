@@ -13,3 +13,7 @@ frontend/build/
 .DS_Store
 .history/
 frontend/.env
+build_johgo.sh
+backend.pid
+frontend.pid
+internal.pid

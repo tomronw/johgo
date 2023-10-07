@@ -3,16 +3,22 @@ const path = require('path');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 
 const app = express();
+require('dotenv').config();
 
 app.use(express.static(path.join(__dirname, 'build')));
 
-app.use('/v1/search', createProxyMiddleware({
-  target: 'http://localhost:16078',
+app.use('/search', createProxyMiddleware({
+  target: process.env.REACT_APP_APIENDPOINT,
   changeOrigin: true
 }));
 
-app.use('/v1/search_suggestions', createProxyMiddleware({
-  target: 'http://localhost:8005',
+app.use('/search_suggestions', createProxyMiddleware({
+  target: process.env.REACT_APP_BASEAPI,
+  changeOrigin: true
+}));
+
+app.use('/serve_calendar', createProxyMiddleware({
+  target: process.env.REACT_APP_BASEAPI,
   changeOrigin: true
 }));
 

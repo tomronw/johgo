@@ -14,7 +14,7 @@ export const SuggestionProvider = ({ children }) => {
     const fetchSuggestions = async () => {
 
         try {
-            const response = await fetch(process.env.REACT_APP_SUGGESTIONS);
+            const response = await fetch(`${process.env.REACT_APP_BASEAPI}/search_suggestions`);
 
             if (response.ok) {
                 const data = await response.json();
