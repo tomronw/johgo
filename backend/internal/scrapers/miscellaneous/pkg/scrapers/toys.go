@@ -28,7 +28,7 @@ func GetToys(site coreModels.Site) (p elastic.ProductsToStore, err error, s stri
 
 		cli := http.ScraperHttpclient("")
 
-		getToysReq, err := http.BuildToysRUsRequest(site.URL, currentPage)
+		getToysReq, err := http.BuildToysRUsRequest(currentPage)
 
 		if err == nil {
 

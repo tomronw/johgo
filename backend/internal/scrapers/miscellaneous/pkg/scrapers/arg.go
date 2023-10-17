@@ -15,41 +15,42 @@ import (
 )
 
 func GetArg(site coreModels.Site) (p elastic.ProductsToStore, err error, s string) {
-
+	// argos scraper
 	core.InfoLogger.Println("Getting products from: ", site.Name)
 
 	currentPage := 1
 	var ps []elastic.ElasticProduct
 	pulledProducts := elastic.ProductsToStore{Products: ps}
 	retries := 0
-
+	// build client
 	cli := http.ScraperHttpclient("")
-
-	getArgReq, err := http.BuildArgosRequest(site.URL, currentPage)
+	// return headers and url
+	getArgReq, err := http.BuildArgosRequest()
 
 	if err == nil {
-
+		// make request
 		argResponse, err := cli.Do(getArgReq)
-
+		// if no errors
 		if err == nil {
-
+			// if 200
 			if argResponse.StatusCode == 200 {
-
+				// close body
 				defer argResponse.Body.Close()
-
+				// read body
 				bodyBytes, err := io.ReadAll(argResponse.Body)
 				if err != nil {
 					core.ErrorLogger.Printf("Error parsing body [%s], returning products: %s", site.Name, err)
 					return pulledProducts, err, site.Name
 				}
-
+				// unmarshal body
 				var productStruct models.ArgProduct
 
 				err = json.Unmarshal(bodyBytes, &productStruct)
 				if err == nil {
+					// check if len of data is 0
 					if !(len(productStruct.Data) == 0) {
 						for i := 0; i < len(productStruct.Data); i++ {
-
+							// loop through data and append to products
 							productStorageModel := elastic.ElasticProduct{}
 							if len(productStruct.Data[i].Attributes.WcsID) == 0 {
 								productStorageModel.Image = config.DefaultImage

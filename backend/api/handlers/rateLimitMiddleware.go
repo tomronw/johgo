@@ -13,6 +13,7 @@ type IPRateLimiter struct {
 	b   int
 }
 
+// ip rate limiter
 func NewIPRateLimiter(r rate.Limit, b int) *IPRateLimiter {
 	i := &IPRateLimiter{
 		ips: make(map[string]*rate.Limiter),

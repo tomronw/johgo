@@ -23,6 +23,7 @@ func ServeRouter() {
 }
 
 func crawlRoutes(r *chi.Mux) {
+	// crawls api routes and prints them to the console with addresses
 
 	routes := make([]struct {
 		Method, Route string

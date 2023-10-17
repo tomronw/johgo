@@ -1,6 +1,6 @@
 package config
 
-// Must be filled in to work / save as config.go
+// Must be filled in to work / rename as config.go, take Example prefix off
 var (
 	ExampleDefaultImage               = "default image url"
 	ExampleGlobalDelay                = 600

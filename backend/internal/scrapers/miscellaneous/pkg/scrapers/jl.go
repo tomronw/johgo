@@ -24,7 +24,7 @@ func GetJL(site coreModels.Site) (p elastic.ProductsToStore, err error, s string
 
 	cli := http.ScraperHttpclient("")
 
-	getJLReq, err := http.BuildJohnLewisRequest(site.URL, currentPage)
+	getJLReq, err := http.BuildJohnLewisRequest()
 
 	if err == nil {
 

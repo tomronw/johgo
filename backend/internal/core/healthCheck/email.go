@@ -14,7 +14,8 @@ import (
 )
 
 func SendEmail(reason error) (error, bool) {
-
+	// sends email that the endpoint failed a health check and the reason why
+	// get email and password from api
 	email, pword, err := getApi()
 	if err != nil {
 		return err, false
@@ -40,7 +41,7 @@ func SendEmail(reason error) (error, bool) {
 }
 
 func getApi() (pass string, email string, e error) {
-
+	// gets the email and password from the api
 	url := fmt.Sprintf("%s/v1/%s", config.SitesAPIURL, config.EmailURI)
 
 	req, _ := http.NewRequest("GET", url, nil)

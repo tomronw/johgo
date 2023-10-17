@@ -11,7 +11,7 @@ import (
 // Build simple HTTP client for scraper
 
 func ScraperHttpclient(proxy string) *http.Client {
-
+	// Build simple HTTP client for scraper
 	cli := createClient(proxy)
 
 	return cli
@@ -19,7 +19,8 @@ func ScraperHttpclient(proxy string) *http.Client {
 }
 
 func createClient(proxy string) *http.Client {
-
+	// check if proxy set or not
+	// if so we apply below, if not just build a simple client without
 	if proxy == "" {
 		client := &http.Client{
 			Timeout: time.Duration(15) * time.Second,
@@ -61,7 +62,7 @@ func createClient(proxy string) *http.Client {
 }
 
 func splitProxy(proxy string) (returnedProxyHost string, returnedUsername string, returnedPassword string) {
-
+	// format proxy for go http transport
 	s := strings.Split(proxy, ":")
 
 	returnedProxyHost, returnedProxyHostTwo, returnedUsername, returnedPassword := s[0], s[1], s[2], s[3]

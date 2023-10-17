@@ -15,7 +15,7 @@ var (
 )
 
 func init() {
-
+	// create logging files and init
 	now := time.Now()
 	f, err := os.OpenFile("internal/core/logs/engine/"+now.Format("01-02-2006")+"-johgo-engine.log",
 		os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)

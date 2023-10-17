@@ -12,9 +12,12 @@ import (
 )
 
 func SpawnHealthCheck() {
+	// spawns a health check that runs as specified in the config file
 	time.Sleep(time.Duration(config.HealthInterval) * time.Minute)
 	for {
+		// check endpoint
 		healthCheckSuccessful, reason := CheckEndpoint()
+		// if failed, send email
 		if !healthCheckSuccessful {
 			logger.ApiErrorLogger.Printf("failed to check endpoint: %v", reason)
 			err, emailSent := SendEmail(reason)
@@ -36,7 +39,9 @@ func SpawnHealthCheck() {
 }
 
 func CheckEndpoint() (healthCheckSuccessful bool, reason error) {
-
+	// here we just make a request to the endpoint and check the response to see if it's successful
+	// settings for the request are in the config file, sometimes we need special headers to get through
+	// ddos protection
 	req, _ := http.NewRequest("GET", config.SiteSearchEndpoint, nil)
 
 	req.Header.Add("accept-language", "en-GB,en-US;q=0.9,en;q=0.8")

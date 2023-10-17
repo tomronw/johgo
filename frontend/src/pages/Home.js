@@ -18,7 +18,7 @@ function Home() {
     var calendarMargin
     var currentTheme
     if (isMobile) {
-        calendarMargin = "-11%"
+        calendarMargin = "-18%"
     } else {
         calendarMargin = '-7%'
     }

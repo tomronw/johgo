@@ -25,7 +25,7 @@ func GetSelf(site coreModels.Site) (p elastic.ProductsToStore, err error, s stri
 
 	cli := http.ScraperHttpclient("")
 
-	getSelfReq, err := http.BuildSelfridgesRequest(site.URL, currentPage)
+	getSelfReq, err := http.BuildSelfridgesRequest()
 
 	if err == nil {
 
