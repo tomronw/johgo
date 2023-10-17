@@ -51,7 +51,7 @@ func GetWhs(site coreModels.Site) (p elastic.ProductsToStore, err error, s strin
 						for i := 0; i < len(productStruct.Hits); i++ {
 
 							productStorageModel := elastic.ElasticProduct{}
-							if productStruct.Hits[i].CImages[0].Alt != nil {
+							if len(productStruct.Hits[i].CImages) > 0 {
 								productStorageModel.Image = productStruct.Hits[i].CImages[0].URL
 							} else {
 								productStorageModel.Image = config.DefaultImage
