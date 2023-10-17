@@ -25,7 +25,7 @@ func GetAs(site coreModels.Site) (p elastic.ProductsToStore, err error, s string
 
 	cli := http.ScraperHttpclient("")
 
-	getAsReq, err := http.BuildAsdaRequest(site.URL, currentPage)
+	getAsReq, err := http.BuildAsdaRequest()
 
 	if err == nil {
 

@@ -25,7 +25,7 @@ func GetSains(site coreModels.Site) (p elastic.ProductsToStore, err error, s str
 
 	cli := http.ScraperHttpclient("")
 
-	getSainsreq, err := http.BuildSainsburysRequest(site.URL, currentPage)
+	getSainsreq, err := http.BuildSainsburysRequest()
 
 	if err == nil {
 
