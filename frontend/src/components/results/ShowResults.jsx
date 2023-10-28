@@ -2,6 +2,7 @@ import { useContext, useState, useMemo, useEffect } from "react";
 import ProductCard from "./ProductCard";
 import { Grid } from '@mui/material';
 import '../../css/App.css';
+import '../../css/Theme.css';
 import Loader from '../../images/walking.gif'
 import SearchContext from "../../context/SearchContext";
 import NoResults from '../../images/noResults.png'

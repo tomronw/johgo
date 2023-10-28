@@ -86,13 +86,11 @@
 @keyframes slideFromBottom {
   from {
     transform: translateY(100%);
-    /* Starts from 100% of its original position */
     opacity: 0;
   }
 
   to {
     transform: translateY(0);
-    /* Ends at its original position */
     opacity: 1;
   }
 }

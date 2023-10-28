@@ -1,5 +1,4 @@
 import * as React from 'react';
-import '../../css/App.css'
 
 export default function ProductCard({ product }) {
     const isMobile = window.innerWidth <= 768;
@@ -12,7 +11,7 @@ export default function ProductCard({ product }) {
     }
 
     return (
-        <div className="product-card" style={{ maxWidth: '300px' }}>
+        <div style={{ maxWidth: '300px' }}>
             <img
                 src={product.image}
                 style={{
