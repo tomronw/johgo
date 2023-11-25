@@ -25,7 +25,7 @@ func GetWhs(site coreModels.Site) (p elastic.ProductsToStore, err error, s strin
 
 	cli := http.ScraperHttpclient("")
 
-	getWhsReq, err := http.BuildWhsmithRequest(site.URL, currentPage)
+	getWhsReq, err := http.BuildWhsmithRequest()
 
 	if err == nil {
 
@@ -47,11 +47,11 @@ func GetWhs(site coreModels.Site) (p elastic.ProductsToStore, err error, s strin
 
 				err = json.Unmarshal(bodyBytes, &productStruct)
 				if err == nil {
-					if !(len(productStruct.Hits) == 0) {
+					if !(len(productStruct.Hits) == 0) && len(productStruct.Hits) > 0 {
 						for i := 0; i < len(productStruct.Hits); i++ {
 
 							productStorageModel := elastic.ElasticProduct{}
-							if productStruct.Hits[i].CImages[0].Alt != nil {
+							if len(productStruct.Hits[i].CImages) > 0 {
 								productStorageModel.Image = productStruct.Hits[i].CImages[0].URL
 							} else {
 								productStorageModel.Image = config.DefaultImage

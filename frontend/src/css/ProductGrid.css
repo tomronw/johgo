@@ -1,0 +1,36 @@
+.product-grid-container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.no-results-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    width: 100%;
+    height: 100%;
+}
+
+.search-toolbar {
+    position: relative;
+    z-index: 20;
+}
+
+.searchBarContainer {
+    width: 70%;
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    left: 16%;
+    top: 90%;
+    transform: translateY(-50%);
+
+}

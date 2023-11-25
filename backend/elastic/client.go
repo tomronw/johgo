@@ -47,17 +47,18 @@ var (
 	negativeWords           = []string{"mystery", "joblot", "bulk", "paperback"}
 )
 
+// elastic client struct
 type ElasticEngineClient struct {
 	Instance *elasticsearch.Client
 	Index    string
 	MinScore string
 }
 
-// Init elasticsearch client
+// CreateClient Init elasticsearch client
 func CreateClient(index string) (engineClient ElasticEngineClient, e error) {
-
+	// Load elastic credentials from .env
 	elasticCreds := LoadElasticSecurity()
-
+	// will try and create client until it succeeds, usually fails because elastic isnt running
 	for true {
 		// Put elasticsearch config here, given initially when you launch ES
 		ec, err := elasticsearch.NewClient(elasticsearch.Config{
@@ -83,7 +84,7 @@ func CreateClient(index string) (engineClient ElasticEngineClient, e error) {
 			if err == nil {
 
 				defer res.Body.Close()
-				core.InfoLogger.Println("Elastic client started, version: ", elasticsearch.Version)
+				core.InfoLogger.Println("elastic client started, version:", elasticsearch.Version)
 				return ElasticEngineClient{
 					Instance: ec,
 					Index:    index,
@@ -109,30 +110,32 @@ func CreateClient(index string) (engineClient ElasticEngineClient, e error) {
 func (ec ElasticEngineClient) BulkAddProducts(scrapedProducts chan IndexChannel, ctx context.Context, start time.Time) (e error, sent bool) {
 
 	// https://github.com/elastic/go-elasticsearch/blob/main/_examples/bulk/indexer.go
+	// bulk indexer for faster indexing, loops over the channel results and adds them to the bulk indexer
+	// before finally sending them to elastic
 
+	// create bulk indexer
 	indexer, err := esutil.NewBulkIndexer(esutil.BulkIndexerConfig{
 		Client:     ec.Instance,
 		Index:      ec.Index,
 		NumWorkers: 2,
 		FlushBytes: 5e+6,
 	})
-
 	totalProducts := 0
 	productsIndexed := 0
 	docId := 0
-
+	// loop over capacity of channel
 	for i := 0; i < cap(scrapedProducts); i++ {
-
+		// get results from channel
 		siteResults := <-scrapedProducts
-
+		// add to total products
 		totalProducts += len(siteResults.ReturnProduct.Products)
-
+		// loop over products
 		for _, product := range siteResults.ReturnProduct.Products {
-
+			// if product doesnt contain any negative words, add to bulk indexer
 			if !containsAny(product.Title) {
 
 				p, _ := json.Marshal(product)
-
+				// add as bulk indexer item
 				err = indexer.Add(
 					ctx,
 					esutil.BulkIndexerItem{
@@ -146,7 +149,6 @@ func (ec ElasticEngineClient) BulkAddProducts(scrapedProducts chan IndexChannel,
 							item esutil.BulkIndexerItem,
 							res esutil.BulkIndexerResponseItem,
 						) {
-							//fmt.Printf("[%d] %s test/%s", res.Status, res.Result, item.DocumentID)
 							productsIndexed++
 						},
 
@@ -156,13 +158,14 @@ func (ec ElasticEngineClient) BulkAddProducts(scrapedProducts chan IndexChannel,
 							res esutil.BulkIndexerResponseItem, err error,
 						) {
 							if err != nil {
-								fmt.Printf("ERROR: %s", err)
+								fmt.Printf("error: %s", err)
 							} else {
-								fmt.Printf("ERROR: %s: %s", res.Error.Type, res.Error.Reason)
+								fmt.Printf("error: %s: %s", res.Error.Type, res.Error.Reason)
 							}
 						},
 					},
 				)
+				// increment doc id
 				docId++
 				if err != nil {
 					core.ErrorLogger.Printf("Unexpected error: %s", err.Error())
@@ -171,18 +174,17 @@ func (ec ElasticEngineClient) BulkAddProducts(scrapedProducts chan IndexChannel,
 
 		}
 	}
-
 	if err != nil {
 		core.ErrorLogger.Printf("Unexpected error: %s", err.Error())
 		return err, false
 	}
 
-	//
+	// close bulk indexer and get stats
 	if err := indexer.Close(context.Background()); err != nil {
 		core.ErrorLogger.Printf("Unexpected error: %s", err.Error())
 		return err, false
 	}
-
+	// Get the stats and log them
 	stats := indexer.Stats()
 	// Code to measure
 	duration := time.Since(start)
@@ -257,25 +259,24 @@ func LoadElasticSecurity() ElasticCreds {
 
 }
 
-// Delete index before sending new data into it
-
 func (ec ElasticEngineClient) WipeIndex(ctx context.Context) (e error) {
+	// deletes index with provided index name
+	// create delete request
 	req := esapi.IndicesDeleteRequest{
 		Index: []string{ec.Index},
 	}
-
+	// send request
 	res, err := req.Do(ctx, ec.Instance)
-
+	// no error on deleting index
 	if err == nil {
 		defer res.Body.Close()
-
+		// double check if response is error
 		if res.IsError() {
 			core.ErrorLogger.Printf("%s- %s [%s]", ErrorDeletingIndex, ec.Index, res.Status())
 			bodyBytes, err := io.ReadAll(res.Body)
 			if err != nil {
 				log.Fatal(err)
 			}
-
 			// load response into ElasticRequestError struct
 			var elasticError ElasticReqError
 			err = json.Unmarshal(bodyBytes, &elasticError)
@@ -296,7 +297,7 @@ func (ec ElasticEngineClient) WipeIndex(ctx context.Context) (e error) {
 // Index once all results are in
 
 func (ec ElasticEngineClient) IndexResults(scrapedProducts chan IndexChannel, ctx context.Context, start time.Time) (e error, successful bool) {
-
+	// deprecated function, replaced by bulk indexer, kept for reference and testing
 	totalProducts := 0
 	productsIndexed := 0
 	docIds := 1
@@ -340,32 +341,35 @@ func (ec ElasticEngineClient) IndexResults(scrapedProducts chan IndexChannel, ct
 // For the api to call, processes frontend query
 
 func (ec ElasticEngineClient) Query(query string, filterSingles bool) (e error, successful bool, results []byte) {
-
+	// handles query from frontend request
+	// create products struct
 	var ps []ElasticProduct
 	pulledProducts := ProductsToStore{Products: ps}
-
+	// create scope for search
 	res, err := ec.Instance.Search(
 		ec.Instance.Search.WithContext(context.Background()),
-		ec.Instance.Search.WithBody(strings.NewReader(fmt.Sprintf("{ \"from\" : 0, \"size\" : 10000, \"min_score\": %s, \"query\": {\"match\": {\"Title\": \"%s\"}}}", ec.MinScore, query))),
+		ec.Instance.Search.WithBody(strings.NewReader(fmt.Sprintf("{ \"from\" : 0, \"size\" : 10000, \"min_score\": %s, \"query\": {\"match\": {\"title\": \"%s\"}}}", ec.MinScore, query))),
 		ec.Instance.Search.WithTrackTotalHits(true),
 		ec.Instance.Search.WithPretty(),
 	)
 	if err == nil {
-
+		// no error so we read the response body
 		bodyBytes, err := io.ReadAll(res.Body)
 		if err != nil {
 			core.ErrorLogger.Printf(err.Error())
 			return err, false, nil
 		}
-
+		// create elastic query struct
 		var productStruct ElasticQuery
-
+		// unmarshal response body into elastic query struct
 		err = json.Unmarshal(bodyBytes, &productStruct)
 		if err != nil {
 			logger.ApiErrorLogger.Printf("%s: %s", ErrorParsingBody, err.Error())
 			return err, false, nil
 		}
 
+		core.InfoLogger.Printf("total hits for query [%s]: %d", query, productStruct.Hits.Total.Value)
+		// loop over hits and add to products struct, checking for duplicates before returning
 		for _, hit := range productStruct.Hits.QueryHits {
 			duplicate := false
 			productStorageModel := ElasticProduct{}
@@ -384,23 +388,23 @@ func (ec ElasticEngineClient) Query(query string, filterSingles bool) (e error, 
 				pulledProducts.Products = append(pulledProducts.Products, productStorageModel)
 			}
 		}
-
+		// check if we need to filter singles or not, loaded from the switch on the frontend
 		if filterSingles {
 			pulledProducts = FilterSingleCards(pulledProducts)
 		}
-
+		// marshal products struct into json
 		jsonData, err := json.Marshal(pulledProducts)
 		if err != nil {
 			logger.ApiErrorLogger.Printf("%s: %s", ErrorParsingBody, err.Error())
 			return err, false, nil
 		}
-
+		// return json data
 		return nil, true, jsonData
 	} else {
 		logger.ApiErrorLogger.Printf("%s: %s", ErrorFormattingPayload, err.Error())
 	}
 	defer res.Body.Close()
-
+	// if error, return error and marshall into json
 	if res.IsError() {
 		var e map[string]interface{}
 		if err := json.NewDecoder(res.Body).Decode(&e); err != nil {
@@ -421,19 +425,24 @@ func (ec ElasticEngineClient) Query(query string, filterSingles bool) (e error, 
 }
 
 func FilterSingleCards(products ProductsToStore) ProductsToStore {
-
+	// here we attempt to filter out single cards, we do this by checking if the title contains
+	// any variation of set numbers, IE x/xxx or x / x or xxx etc
+	// however this was during the release of 151, so we also check for 151 in the title and allow if so
 	var filteredProducts ProductsToStore
+	// loop over products
 	for _, product := range products.Products {
-
+		// match regex
 		match, err := regexp.MatchString("[a-zA-Z]{0,2}[0-9]{1,3}/[a-zA-Z]{0,2}[0-9]{1,3}|[a-zA-Z]{0,2}[0-9]{1,3}\\s/\\s[a-zA-Z]{0,2}[0-9]{1,3}|[a-zA-Z]{0,2}[0-9]{3}", product.Title)
 		if err != nil {
+			// if error, log and return
 			core.ErrorLogger.Printf("Error matching regex: %s", err.Error())
 			return products
 		}
-
+		// if no match, add to filtered products
 		if !match {
 			filteredProducts.Products = append(filteredProducts.Products, product)
 		} else if strings.Contains(product.Title, "151") {
+			// if 151 in title, add to filtered products
 			filteredProducts.Products = append(filteredProducts.Products, product)
 		}
 	}
@@ -442,7 +451,7 @@ func FilterSingleCards(products ProductsToStore) ProductsToStore {
 }
 
 func containsAny(s string) bool {
-
+	// check if string contains any of the negative words
 	for _, substr := range negativeWords {
 		if strings.Contains(strings.ToLower(s), substr) {
 			return true
@@ -452,7 +461,6 @@ func containsAny(s string) bool {
 }
 
 func JsonStruct(product ElasticProduct) string {
-
 	// Marshal the struct to JSON and check for errors
 	b, err := json.Marshal(product)
 	if err != nil {

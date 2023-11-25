@@ -7,12 +7,17 @@ const app = express();
 app.use(express.static(path.join(__dirname, 'build')));
 
 app.use('/v1/search', createProxyMiddleware({
-  target: 'http://localhost:16078',
+  target: "http://localhost:16078",
   changeOrigin: true
 }));
 
 app.use('/v1/search_suggestions', createProxyMiddleware({
-  target: 'http://localhost:8005',
+  target: "http://localhost:8005",
+  changeOrigin: true
+}));
+
+app.use('/v1/serve_calendar', createProxyMiddleware({
+  target: "http://localhost:8005",
   changeOrigin: true
 }));
 

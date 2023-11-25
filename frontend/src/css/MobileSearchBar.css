@@ -1,0 +1,56 @@
+.mobileSearchBar {
+    background-color: #222;
+    max-height: 30%;
+    border-radius: 10px;
+    opacity: 0.5;
+    width: 70%;
+    transition: opacity 1s;
+    border-color: white;
+    color: white;
+}
+
+.mobileDropdown {
+    max-height: 30%;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* styles.css */
+.smallSearchBar {
+    width: 80%;
+}
+
+.smallSearchBar .MuiOutlinedInput-root {
+    height: 40px;
+    /* Adjusted height */
+    border-radius: 15px;
+    background-color: rgba(34, 34, 34, 0.5);
+    /* Adjusted background-color to include opacity */
+    transition: opacity 1s;
+    border-color: white;
+}
+
+.smallSearchBar .MuiOutlinedInput-notchedOutline {
+    border-color: white;
+}
+
+.smallSearchBar .MuiOutlinedInput-input {
+    padding: 10px 14px;
+    color: white;
+    font-size: 0.875rem;
+    /* Adjusted font size */
+}
+
+.smallSearchBar .MuiInputLabel-outlined {
+    transform: translate(14px, 12px) scale(1);
+    color: white;
+}
+
+.smallSearchBar .MuiInputLabel-outlined.MuiInputLabel-shrink {
+    transform: translate(14px, -6px) scale(0.75);
+    color: white;
+}
+
+.smallSearchBar .MuiAutocomplete-inputRoot[class*="MuiOutlinedInput-root"] .MuiAutocomplete-input {
+    padding: 0;
+}

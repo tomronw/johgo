@@ -1,6 +1,7 @@
 .footer {
     position: fixed;
     bottom: 0;
+    z-index: 1000;
     width: 100%;
     height: 50px;
     background-color: #222;
@@ -12,6 +13,21 @@
     font-weight: bold;
 }
 
+@media (max-width: 768px) {
+
+    .footer a,
+    .footer-link {
+        margin: 0 20px;
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+        cursor: pointer;
+        font-size: small;
+    }
+
+}
+
+
 .footer a,
 .footer-link {
     margin: 0 20px;
@@ -21,38 +37,26 @@
     cursor: pointer;
 }
 
-.modal {
-    position: fixed;
-    z-index: 1;
-    left: 5;
-    top: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 400px;
-    /* Adjust the width as needed */
-    height: 800px;
-}
+@keyframes gastlyFloat {
+    0% {
+        transform: translateY(10px);
+    }
 
-.modal-content {
-    position: relative;
-    justify-content: center;
-    align-items: center;
-    background-color: #343232;
-    padding: 20px;
-    border-radius: 15px;
+    25% {
+        transform: translateX(-5px);
+    }
 
-    background: linear-gradient(-45deg, #373533, #461748, #1e2224, #2f2d2d);
-    animation: gradient 5s ease infinite;
-    background-size: 400% 400%;
-}
+    50% {
+        transform: translateY(-10px);
+    }
 
-.close {
-    position: absolute;
-    top: 0px;
-    right: 18px;
-    font-size: 30px;
-    cursor: pointer;
+    75% {
+        transform: translateX(5px);
+    }
+
+    100% {
+        transform: translateY(10px);
+    }
 }
 
 .image {
@@ -60,19 +64,5 @@
     height: 60px;
     width: 60px;
     display: flex;
-
-}
-
-@keyframes gradient {
-    0% {
-        background-position: 0% 50%;
-    }
-
-    50% {
-        background-position: 100% 50%;
-    }
-
-    100% {
-        background-position: 0% 50%;
-    }
+    animation: gastlyFloat 2s infinite;
 }

@@ -2,7 +2,7 @@ package main
 
 import (
 	"johgo-search-engine/api"
-	"johgo-search-engine/internal/core/healthcheck"
+	healthcheck "johgo-search-engine/internal/core/healthCheck"
 	"johgo-search-engine/internal/scrapers/miscellaneous"
 	"johgo-search-engine/internal/scrapers/shopify"
 	"johgo-search-engine/internal/scrapers/supermarkets"

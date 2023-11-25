@@ -60,28 +60,15 @@ func GetPages(site coreModels.Site) (p elastic.ProductsToStore, err error, s str
 
 											if productStruct.Products[i].Variants[v].Available {
 
-												productStorageModel := elastic.ElasticProduct{}
+												productStorageModel := formatToStorageModel(productStruct, i, v, site)
 
-												if len(productStruct.Products[i].Images) == 0 {
-													productStorageModel.Image = config.DefaultImage
-												} else {
-													productStorageModel.Image = productStruct.Products[i].Images[0].Src
-												}
-
-												productStorageModel.Price = productStruct.Products[i].Variants[v].Price
-												productStorageModel.Title = productStruct.Products[i].Title
-												productStorageModel.Url = site.URL + "/products/" + productStruct.Products[i].Handle
-												productStorageModel.SiteName = site.Name
-												productStorageModel.SiteUrl = site.URL
 												pulledProducts.Products = append(pulledProducts.Products, productStorageModel)
 											}
 										}
 									}
-
 								}
 							}
 						} else {
-							//core.InfoLogger.Printf("No more pages for: %s on page: %s", site.Name, strconv.Itoa(currentPage))
 							anotherPage = false
 						}
 
@@ -89,11 +76,9 @@ func GetPages(site coreModels.Site) (p elastic.ProductsToStore, err error, s str
 						core.ErrorLogger.Printf("Error parsing body [%s], returning products: %s", site.Name, err)
 						return pulledProducts, err, site.Name
 					}
-					// fmt.Println("Page: ", strconv.Itoa(currentPage), site.Name)
 					currentPage++
 				} else {
 					retries++
-					//core.ErrorLogger.Printf("Banned on: %s, retries left: %d", site.Name, retries)
 					if !core.CheckRetries(retries) {
 						//core.ErrorLogger.Printf("Retries exceeded on: %s, returning products...", site.Name)
 						return pulledProducts, err, site.Name
@@ -102,10 +87,13 @@ func GetPages(site coreModels.Site) (p elastic.ProductsToStore, err error, s str
 				}
 
 			} else {
+				if strings.Contains(err.Error(), "context deadline exceeded") {
+					core.ErrorLogger.Printf("timeout error (context deadline exceeded) on site: ", site.Name)
+				} else {
+					core.ErrorLogger.Printf("error getting response: ", site.Name, err.Error())
 
-				core.ErrorLogger.Printf("Error getting response: ", site.Name, err.Error())
-
-				anotherPage = false
+					anotherPage = false
+				}
 			}
 
 		} else {
@@ -116,4 +104,21 @@ func GetPages(site coreModels.Site) (p elastic.ProductsToStore, err error, s str
 
 	return pulledProducts, nil, site.Name
 
+}
+
+func formatToStorageModel(productStruct models.ShopifyProducts, i int, v int, site coreModels.Site) elastic.ElasticProduct {
+
+	productStorageModel := elastic.ElasticProduct{}
+
+	if len(productStruct.Products[i].Images) == 0 {
+		productStorageModel.Image = config.DefaultImage
+	} else {
+		productStorageModel.Image = productStruct.Products[i].Images[0].Src
+	}
+	productStorageModel.Price = productStruct.Products[i].Variants[v].Price
+	productStorageModel.Title = productStruct.Products[i].Title
+	productStorageModel.Url = site.URL + "/products/" + productStruct.Products[i].Handle
+	productStorageModel.SiteName = site.Name
+	productStorageModel.SiteUrl = site.URL
+	return productStorageModel
 }

@@ -10,9 +10,8 @@ import (
 )
 
 var (
-	EmptyQueryError = "Empty query provided"
-	ECClientError   = "Error with EC client query"
-	NoneBool        = "Singles query parameter must be a boolean"
+	ECClientError = "error with EC client query"
+	NoneBool      = "singles query parameter must be a boolean"
 )
 
 type APIResponse struct {
@@ -21,6 +20,7 @@ type APIResponse struct {
 	Error   string
 }
 
+// mount routes for api
 func Routes() *chi.Mux {
 	r := chi.NewRouter()
 
@@ -28,10 +28,11 @@ func Routes() *chi.Mux {
 	return r
 }
 
+// return search results from elastic
 func ReturnQueryResults(rw http.ResponseWriter, r *http.Request) {
-
+	// create elastic client
 	ec, err := elastic.CreateClient("")
-
+	// if error creating client, return error
 	if err != nil {
 		rw.WriteHeader(http.StatusInternalServerError)
 		rw.Header().Set("Content-Type", "application/json")
@@ -43,10 +44,24 @@ func ReturnQueryResults(rw http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(rw).Encode(e)
 		return
 	}
-
+	// get query and filter_singles params
 	q := r.URL.Query().Get("query")
 	b := r.URL.Query().Get("filter_singles")
+	// if either are empty, return bad request
+	if q == "" || b == "" {
+		rw.WriteHeader(http.StatusBadRequest)
+		rw.Header().Set("Content-Type", "application/json")
+		e := APIResponse{
+			Success: false,
+			Data:    nil,
+			Error:   "bad request params",
+		}
+		json.NewEncoder(rw).Encode(e)
+		return
+	}
+	// parse singles param
 	includeSingles, err := strconv.ParseBool(b)
+	// if error parsing singles param, return bad request
 	if err != nil {
 		rw.WriteHeader(http.StatusForbidden)
 		rw.Header().Set("Content-Type", "application/json")
@@ -58,20 +73,8 @@ func ReturnQueryResults(rw http.ResponseWriter, r *http.Request) {
 
 		return
 	}
-
-	if q == "" {
-		rw.WriteHeader(http.StatusForbidden)
-		rw.Header().Set("Content-Type", "application/json")
-		e := APIResponse{
-			Success: false,
-			Error:   EmptyQueryError,
-		}
-		json.NewEncoder(rw).Encode(e)
-
-		return
-	}
-
 	logger.ApiInfoLogger.Printf("Getting search query: [%s] for %s", q, r.Host)
+	// query elastic and return results or error
 	err, successful, result := ec.Query(q, includeSingles)
 
 	if err != nil || !successful {
@@ -84,8 +87,9 @@ func ReturnQueryResults(rw http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(rw).Encode(e)
 		return
 	} else {
-
+		// sometimes elastic returned no results but true to successful search
 		if len(result) > 25 {
+			// successful search with results, encode and return
 			rw.WriteHeader(http.StatusOK)
 			rw.Header().Set("Content-Type", "application/json")
 			e := APIResponse{

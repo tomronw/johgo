@@ -1,9 +1,9 @@
-import NonExist from "../components/NonExist.jsx";
+import RouteNotFound from "../components/miscellaneous/RouteNotFound";
 
 function NotFound() {
     return (
         <div>
-            <NonExist />
+            <RouteNotFound />
         </div>);
 }
 

@@ -52,7 +52,6 @@ func TestWpScrape(t *testing.T) {
 			fmt.Println("rel attribute does not exist")
 		}
 
-		fmt.Println()
 	})
 
 }

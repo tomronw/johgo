@@ -2,7 +2,6 @@ package scrapers
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/PuerkitoBio/goquery"
 	"io"
 	"johgo-search-engine/config"
@@ -29,7 +28,7 @@ func GetToys(site coreModels.Site) (p elastic.ProductsToStore, err error, s stri
 
 		cli := http.ScraperHttpclient("")
 
-		getToysReq, err := http.BuildToysRUsRequest(site.URL, currentPage)
+		getToysReq, err := http.BuildToysRUsRequest(currentPage)
 
 		if err == nil {
 
@@ -65,7 +64,6 @@ func GetToys(site coreModels.Site) (p elastic.ProductsToStore, err error, s stri
 							productLink, exists := s.Find("a").Attr("href")
 							if exists {
 								productStorageModel.Url = productLink
-								fmt.Println(productStorageModel.Title)
 							} else {
 								productStorageModel.Url = site.URL
 							}
