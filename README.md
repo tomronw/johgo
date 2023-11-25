@@ -21,7 +21,7 @@ the scrapes.
  
 <br/>
 
-<img src="frontend/src/images/home_screenshot.png" height="300" width="600"><img src="frontend/src/images/phone_gif.gif" height="300" width="200">
+<img src="frontend/src/images/home_screenshot.png" height="300" width="500"><img src="frontend/src/images/phone_gif.gif" height="300" width="150">
 
 <br/>
 
@@ -77,7 +77,7 @@ If you would like to contribute code to the project, we welcome pull requests on
 
 <br/>
 
-<img src="frontend/src/images/search_screenshot.png" height="300" width="600">
+<img src="frontend/src/images/search_screenshot.png" height="300" width="500">
 
 <br/>
 
