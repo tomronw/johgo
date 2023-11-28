@@ -15,6 +15,8 @@ var wgMain sync.WaitGroup
 func main() {
 	// go build backend.go
 	// launch all scrapers
+	// TODO: add pointers to string in product fields to better handle empty strings
+	// TODO: trim structs to avoid wasting compute power and add omitempty to pointers
 	wgMain.Add(5)
 	go miscellaneous.ScrapeMiscellaneous()
 	go shopify.ScrapeShopifySites()
