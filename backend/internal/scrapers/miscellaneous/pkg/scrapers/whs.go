@@ -51,13 +51,10 @@ func GetWhs(site coreModels.Site) (p elastic.ProductsToStore, err error, s strin
 						for i := 0; i < len(productStruct.Hits); i++ {
 
 							productStorageModel := elastic.ElasticProduct{}
-							if len(productStruct.Hits[i].CImages) > 0 {
-								productStorageModel.Image = productStruct.Hits[i].CImages[0].URL
-							} else {
-								productStorageModel.Image = config.DefaultImage
-							}
-							productStorageModel.Price = strconv.Itoa(int(productStruct.Hits[i].Price))
-							productStorageModel.Title = productStruct.Hits[i].ProductName
+
+							productStorageModel.Image = core.ValidateString(productStruct.Hits[i].CImages[0].URL, config.DefaultImage)
+							productStorageModel.Price = strconv.Itoa(int(core.ValidateFloat64(productStruct.Hits[i].Price, 0.00)))
+							productStorageModel.Title = core.ValidateString(productStruct.Hits[i].ProductName, "Untitled")
 							productStorageModel.Url = fmt.Sprintf("https://www.whsmith.co.uk/%s/%s.html", productStruct.Hits[i].CPageURL, productStruct.Hits[i].ProductID)
 							productStorageModel.SiteName = site.Name
 							productStorageModel.SiteUrl = site.URL

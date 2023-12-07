@@ -10,7 +10,6 @@ import (
 	"johgo-search-engine/internal/core/coreModels"
 	"johgo-search-engine/internal/core/http"
 	"johgo-search-engine/internal/scrapers/miscellaneous/pkg/models"
-	"strconv"
 	"time"
 )
 
@@ -52,14 +51,10 @@ func GetArg(site coreModels.Site) (p elastic.ProductsToStore, err error, s strin
 						for i := 0; i < len(productStruct.Data); i++ {
 							// loop through data and append to products
 							productStorageModel := elastic.ElasticProduct{}
-							if len(productStruct.Data[i].Attributes.WcsID) == 0 {
-								productStorageModel.Image = config.DefaultImage
-							} else {
-								productStorageModel.Image = fmt.Sprintf("https://media.4rgos.it/s/Argos/%s_R_SET", productStruct.Data[i].ID)
-							}
-							productStorageModel.Price = strconv.Itoa(int(productStruct.Data[i].Attributes.Price))
-							productStorageModel.Title = productStruct.Data[i].Attributes.Name
-							productStorageModel.Url = fmt.Sprintf("https://www.argos.co.uk/product/%s", productStruct.Data[i].ID)
+							productStorageModel.Image = core.ValidateString(productStruct.Data[i].Attributes.WcsID, config.DefaultImage)
+							productStorageModel.Price = fmt.Sprintf("%.2f", core.ValidateFloat64(productStruct.Data[i].Attributes.Price, 0.00))
+							productStorageModel.Title = core.ValidateString(productStruct.Data[i].Attributes.Name, "error")
+							productStorageModel.Url = fmt.Sprintf("https://www.argos.co.uk/product/%s", core.ValidateString(productStruct.Data[i].ID, "404"))
 							productStorageModel.SiteName = site.Name
 							productStorageModel.SiteUrl = site.URL
 							pulledProducts.Products = append(pulledProducts.Products, productStorageModel)

@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"johgo-search-engine/config"
 	"johgo-search-engine/elastic"
 	"johgo-search-engine/internal/core"
 	"johgo-search-engine/internal/core/coreModels"
@@ -51,14 +50,11 @@ func GetSelf(site coreModels.Site) (p elastic.ProductsToStore, err error, s stri
 						for i := 0; i < len(productStruct.Products); i++ {
 
 							productStorageModel := elastic.ElasticProduct{}
-							if len(productStruct.Products[i].Im) == 0 {
-								productStorageModel.Image = config.DefaultImage
-							} else {
-								productStorageModel.Image = fmt.Sprintf("https://images.selfridges.com/is/image/selfridges/%s?$PDP_M_ZOOM$", productStruct.Products[i].Im)
-							}
-							productStorageModel.Price = strings.ReplaceAll(productStruct.Products[i].P, "£", "")
-							productStorageModel.Title = productStruct.Products[i].Na
-							productStorageModel.Url = fmt.Sprintf("https://www.selfridges.com/GB/en/cat/prod_%s", productStruct.Products[i].ID)
+
+							productStorageModel.Image = fmt.Sprintf("https://images.selfridges.com/is/image/selfridges/%s?$PDP_M_ZOOM$", core.ValidateString(productStruct.Products[i].Im, "00000"))
+							productStorageModel.Price = strings.ReplaceAll(core.ValidateString(productStruct.Products[i].P, "0.00"), "£", "")
+							productStorageModel.Title = core.ValidateString(productStruct.Products[i].Na, "Untitled")
+							productStorageModel.Url = fmt.Sprintf("https://www.selfridges.com/GB/en/cat/prod_%s", core.ValidateString(productStruct.Products[i].ID, "404"))
 							productStorageModel.SiteName = site.Name
 							productStorageModel.SiteUrl = site.URL
 							pulledProducts.Products = append(pulledProducts.Products, productStorageModel)

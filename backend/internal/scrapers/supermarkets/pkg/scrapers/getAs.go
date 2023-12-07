@@ -47,37 +47,46 @@ func GetAs(site coreModels.Site) (p elastic.ProductsToStore, err error, s string
 
 				err = json.Unmarshal(bodyBytes, &productStruct)
 				if err == nil {
-					if !(len(productStruct.Data.TempoCmsContent.Zones[1].Configs.Products.Items) == 0) {
-						for i := 0; i < len(productStruct.Data.TempoCmsContent.Zones[1].Configs.Products.Items); i++ {
+					// Check if Zones has at least 2 elements before accessing Zones[1]
+					if len(productStruct.Data.TempoCmsContent.Zones) > 1 {
+						zone := productStruct.Data.TempoCmsContent.Zones[1]
 
-							if strings.Contains(strings.ToLower(productStruct.Data.TempoCmsContent.Zones[1].Configs.Products.Items[i].Item.Name), strings.ToLower(site.Keyword)) {
+						// Check if there are items in the zone
+						if len(zone.Configs.Products.Items) > 0 {
+							for _, item := range zone.Configs.Products.Items {
+								if strings.Contains(strings.ToLower(item.Item.Name), strings.ToLower(site.Keyword)) {
+									if item.Inventory.AvailabilityInfo.Availability == "A" {
+										productStorageModel := elastic.ElasticProduct{}
 
-								if productStruct.Data.TempoCmsContent.Zones[1].Configs.Products.Items[i].Inventory.AvailabilityInfo.Availability == "A" {
-									productStorageModel := elastic.ElasticProduct{}
-									if len(productStruct.Data.TempoCmsContent.Zones[1].Configs.Products.Items[i].Item.Images.Scene7ID) == 0 {
-										productStorageModel.Image = config.DefaultImage
-									} else {
-										productStorageModel.Image = fmt.Sprintf("https://ui.assets-asda.com/dm/asdagroceries/%s", productStruct.Data.TempoCmsContent.Zones[1].Configs.Products.Items[i].Item.Images.Scene7ID)
+										if len(item.Item.Images.Scene7ID) == 0 {
+											productStorageModel.Image = config.DefaultImage
+										} else {
+											productStorageModel.Image = fmt.Sprintf("https://ui.assets-asda.com/dm/asdagroceries/%s", item.Item.Images.Scene7ID)
+										}
+
+										productStorageModel.Price = strings.ReplaceAll(item.Price.PriceInfo.Price, "£", "")
+										productStorageModel.Title = item.Item.Name
+										productStorageModel.Url = fmt.Sprintf("https://groceries.asda.com/product/%s", item.Item.SkuID)
+										productStorageModel.SiteName = site.Name
+										productStorageModel.SiteUrl = site.URL
+
+										pulledProducts.Products = append(pulledProducts.Products, productStorageModel)
 									}
-									productStorageModel.Price = strings.ReplaceAll(productStruct.Data.TempoCmsContent.Zones[1].Configs.Products.Items[i].Price.PriceInfo.Price, "£", "")
-									productStorageModel.Title = productStruct.Data.TempoCmsContent.Zones[1].Configs.Products.Items[i].Item.Name
-									productStorageModel.Url = fmt.Sprintf("https://groceries.asda.com/product/%s", productStruct.Data.TempoCmsContent.Zones[1].Configs.Products.Items[i].Item.SkuID)
-									productStorageModel.SiteName = site.Name
-									productStorageModel.SiteUrl = site.URL
-									pulledProducts.Products = append(pulledProducts.Products, productStorageModel)
 								}
 							}
-
+						} else {
+							// Handle the case where there are no items
+							return pulledProducts, nil, site.Name
 						}
 					} else {
-						//core.InfoLogger.Printf("No more items for: %s ", site.Name)
-						return pulledProducts, err, site.Name
+						// Handle the case where Zones does not have enough elements
+						return pulledProducts, fmt.Errorf("not enough elements in Zones"), site.Name
 					}
-
 				} else {
 					//core.ErrorLogger.Printf("Error parsing body [%s], returning products: %s", site.Name, err)
 					return pulledProducts, err, site.Name
 				}
+
 				// fmt.Println("Page: ", strconv.Itoa(currentPage), site.Name)
 				currentPage++
 			} else {

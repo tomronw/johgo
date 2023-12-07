@@ -22,7 +22,7 @@ func main() {
 	go shopify.ScrapeShopifySites()
 	go woocommerce.ScrapeWooCommerce()
 	go supermarkets.ScrapeSupermarkets()
-
+	//
 	// launch health check
 	go healthcheck.SpawnHealthCheck()
 

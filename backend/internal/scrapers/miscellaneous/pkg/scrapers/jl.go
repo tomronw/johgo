@@ -51,14 +51,10 @@ func GetJL(site coreModels.Site) (p elastic.ProductsToStore, err error, s string
 							if !productStruct.JLProducts[i].OutOfStock {
 
 								productStorageModel := elastic.ElasticProduct{}
-								if len(productStruct.JLProducts[i].Image) == 0 {
-									productStorageModel.Image = config.DefaultImage
-								} else {
-									productStorageModel.Image = fmt.Sprintf("https:%s", productStruct.JLProducts[i].Image)
-								}
-								productStorageModel.Price = productStruct.JLProducts[i].Price.Now
-								productStorageModel.Title = productStruct.JLProducts[i].Title
-								productStorageModel.Url = fmt.Sprintf("https://www.johnlewis.com/product/p%s", productStruct.JLProducts[i].ProductID)
+								productStorageModel.Image = core.ValidateString(productStruct.JLProducts[i].Image, config.DefaultImage)
+								productStorageModel.Price = core.ValidateString(productStruct.JLProducts[i].Price.Now, "0.00")
+								productStorageModel.Title = core.ValidateString(productStruct.JLProducts[i].Title, "error")
+								productStorageModel.Url = fmt.Sprintf("https://www.johnlewis.com/product/p%s", core.ValidateString(productStruct.JLProducts[i].ProductID, "404"))
 								productStorageModel.SiteName = site.Name
 								productStorageModel.SiteUrl = site.URL
 								pulledProducts.Products = append(pulledProducts.Products, productStorageModel)
