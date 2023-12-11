@@ -5,7 +5,6 @@ name: Go build johgo
 
 on:
   push:
-    branches: [ main ]
     paths:
       - 'backend/**'
   pull_request:
@@ -19,19 +18,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Set up Go
-      uses: actions/setup-go@v3
-      with:
-        go-version: '1.20'  # Adjust the Go version as needed
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: '1.20'
 
-    - name: Check out code
-      uses: actions/checkout@v3
+      - name: Check out code
+        uses: actions/checkout@v3
 
-    - name: Build
-      run: go build -v ./../cmd/backend.go
-      working-directory: backend
+      - name: Build
+        run: go build -v ./../cmd/backend.go
+        working-directory: backend
 
-    - name: Test
-      run: go test -v ./...
-      working-directory: backend
-
+      - name: Test
+        run: go test -v ./...
+        working-directory: backend
