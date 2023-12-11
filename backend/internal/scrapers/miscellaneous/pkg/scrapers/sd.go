@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-func GetJL(site coreModels.Site) (p elastic.ProductsToStore, err error, s string) {
+func GetSd(site coreModels.Site) (p elastic.ProductsToStore, err error, s string) {
 
 	core.InfoLogger.Println("Getting products from: ", site.Name)
 
@@ -24,42 +24,38 @@ func GetJL(site coreModels.Site) (p elastic.ProductsToStore, err error, s string
 
 	cli := http.ScraperHttpclient("")
 
-	getJLReq, err := http.BuildJohnLewisRequest()
+	getSdReq, err := http.BuildSDReq()
 
 	if err == nil {
 
-		jLResponse, err := cli.Do(getJLReq)
+		sdResponse, err := cli.Do(getSdReq)
 
 		if err == nil {
 
-			if jLResponse.StatusCode == 200 {
+			if sdResponse.StatusCode == 200 {
 
-				defer jLResponse.Body.Close()
+				defer sdResponse.Body.Close()
 
-				bodyBytes, err := io.ReadAll(jLResponse.Body)
+				bodyBytes, err := io.ReadAll(sdResponse.Body)
 				if err != nil {
 					core.ErrorLogger.Printf("Error parsing body [%s], returning products: %s", site.Name, err)
 					return pulledProducts, err, site.Name
 				}
 
-				var productStruct models.JLProductss
+				var productStruct models.SDResModel
 
 				err = json.Unmarshal(bodyBytes, &productStruct)
 				if err == nil {
-					if !(len(productStruct.JLProducts) == 0) {
-						for i := 0; i < len(productStruct.JLProducts); i++ {
-							if !productStruct.JLProducts[i].OutOfStock {
-
-								productStorageModel := elastic.ElasticProduct{}
-								productStorageModel.Image = core.ValidateString(productStruct.JLProducts[i].Image, config.DefaultImage)
-								productStorageModel.Price = core.ValidateString(productStruct.JLProducts[i].Price.Now, "0.00")
-								productStorageModel.Title = core.ValidateString(productStruct.JLProducts[i].Title, "error")
-								productStorageModel.Url = fmt.Sprintf("https://www.johnlewis.com/product/p%s", core.ValidateString(productStruct.JLProducts[i].ProductID, "404"))
-								productStorageModel.SiteName = site.Name
-								productStorageModel.SiteUrl = site.URL
-								pulledProducts.Products = append(pulledProducts.Products, productStorageModel)
-
-							}
+					if !(len(productStruct.Products) == 0) {
+						for i := 0; i < len(productStruct.Products); i++ {
+							productStorageModel := elastic.ElasticProduct{}
+							productStorageModel.Image = core.ValidateString(productStruct.Products[i].Image, config.DefaultImage)
+							productStorageModel.Price = fmt.Sprintf("%.2f", core.ValidateFloat64(productStruct.Products[i].PriceUnFormatted, 0.00))
+							productStorageModel.Title = core.ValidateString(productStruct.Products[i].Name, "name not found")
+							productStorageModel.Url = fmt.Sprintf("https://www.sportsdirect.com/%s", core.ValidateString(productStruct.Products[i].URL, "404"))
+							productStorageModel.SiteName = site.Name
+							productStorageModel.SiteUrl = site.URL
+							pulledProducts.Products = append(pulledProducts.Products, productStorageModel)
 
 						}
 					} else {
@@ -71,13 +67,10 @@ func GetJL(site coreModels.Site) (p elastic.ProductsToStore, err error, s string
 					//core.ErrorLogger.Printf("Error parsing body [%s], returning products: %s", site.Name, err)
 					return pulledProducts, err, site.Name
 				}
-				// fmt.Println("Page: ", strconv.Itoa(currentPage), site.Name)
 				currentPage++
 			} else {
 				retries++
-				//core.ErrorLogger.Printf("Banned on: %s, retries left: %d", site.Name, retries)
 				if !core.CheckRetries(retries) {
-					//core.ErrorLogger.Printf("Retries exceeded on: %s, returning products...", site.Name)
 					return pulledProducts, err, site.Name
 				}
 				time.Sleep(7 * time.Second)

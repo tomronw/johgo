@@ -250,3 +250,28 @@ func BuildChaosRequest(uri string) (r *http.Request, e error) {
 	}
 	return nil, err
 }
+
+func BuildSDReq() (r *http.Request, e error) {
+
+	url := fmt.Sprintf("https://www.sportsdirect.com/product/search?categoryId=&page=1&productsPerPage=59&sortOption=rank&selectedFilters=ABRA%5EPokemon%7CWEBSTYLE%5ECard%20Games&isSearch=true&searchText=pokemon&columns=3&mobileColumns=2&clearFilters=false&pathName=%2Fsearchresults&searchTermCategory=&selectedCurrency=GBP&portalSiteId=12&searchCategory=")
+
+	req, err := http.NewRequest("GET", url, nil)
+
+	if err == nil {
+		req.Header.Add("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:121.0) Gecko/20100101 Firefox/121.0")
+		req.Header.Add("Accept", "application/json, text/javascript, */*; q=0.01")
+		req.Header.Add("Accept-Language", "en-GB,en;q=0.5")
+		req.Header.Add("X-Requested-With", "XMLHttpRequest")
+		req.Header.Add("Connection", "keep-alive")
+		req.Header.Add("Content-Type", "application/json; charset=UTF-8")
+		req.Header.Add("Referer", "https://www.sportsdirect.com/searchresults?descriptionfilter=pokemon")
+		req.Header.Add("Sec-Fetch-Dest", "empty")
+		req.Header.Add("Sec-Fetch-Mode", "cors")
+		req.Header.Add("Sec-Fetch-Site", "same-origin")
+		req.Header.Add("Pragma", "no-cache")
+		req.Header.Add("Cache-Control", "no-cache")
+		req.Header.Add("TE", "trailers")
+		return req, nil
+	}
+	return nil, err
+}

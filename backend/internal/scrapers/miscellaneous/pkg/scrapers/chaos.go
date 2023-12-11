@@ -97,11 +97,19 @@ func GetChaos(site coreModels.Site) (p elastic.ProductsToStore, err error, s str
 					} else {
 						retries++
 						core.ErrorLogger.Printf("Banned on: %s, retries left: %d", site.Name, retries)
+						if core.CheckRetries(retries) {
+							core.InfoLogger.Printf("Retries exceeded on: %s, returning products...", site.Name)
+							return pulledProducts, err, site.Name
+						}
 						time.Sleep(7 * time.Second)
 					}
 				} else {
 					retries++
-					core.ErrorLogger.Printf("Banned on: %s, retries left: %d", site.Name, retries)
+					core.ErrorLogger.Printf("Banned on: %s [status code: %d], retries left: %d", site.Name, chaosResponse.StatusCode, retries)
+					if core.CheckRetries(retries) {
+						core.InfoLogger.Printf("Retries exceeded on: %s, returning products...", site.Name)
+						return pulledProducts, err, site.Name
+					}
 					time.Sleep(7 * time.Second)
 				}
 

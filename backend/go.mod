@@ -14,6 +14,7 @@ require (
 )
 
 require (
+	github.com/RomainMichau/cloudscraper_go v0.4.1 // indirect
 	github.com/ajg/form v1.5.1 // indirect
 	github.com/andybalholm/cascadia v1.3.1 // indirect
 	github.com/elastic/elastic-transport-go/v8 v8.0.0-20230329154755-1a3c63de0db6 // indirect

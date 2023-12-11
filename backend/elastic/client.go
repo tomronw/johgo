@@ -83,6 +83,8 @@ func CreateClient(index string) (engineClient ElasticEngineClient, e error) {
 			res, err := ec.Info()
 			if err == nil {
 
+				fmt.Printf("min score: %s\n", elasticCreds.MinScore)
+
 				defer res.Body.Close()
 				core.InfoLogger.Println("elastic client started, version:", elasticsearch.Version)
 				return ElasticEngineClient{
@@ -131,7 +133,7 @@ func (ec ElasticEngineClient) BulkAddProducts(scrapedProducts chan IndexChannel,
 		totalProducts += len(siteResults.ReturnProduct.Products)
 		// loop over products
 		for _, product := range siteResults.ReturnProduct.Products {
-			// if product doesnt contain any negative words, add to bulk indexer
+			// if product doesn't contain any negative words, add to bulk indexer
 			if !containsAny(product.Title) {
 
 				p, _ := json.Marshal(product)
@@ -427,7 +429,7 @@ func (ec ElasticEngineClient) Query(query string, filterSingles bool) (e error, 
 func FilterSingleCards(products ProductsToStore) ProductsToStore {
 	// here we attempt to filter out single cards, we do this by checking if the title contains
 	// any variation of set numbers, IE x/xxx or x / x or xxx etc
-	// however this was during the release of 151, so we also check for 151 in the title and allow if so
+	// however this was pre release of 151, so we also check for 151 in the title and allow if so
 	var filteredProducts ProductsToStore
 	// loop over products
 	for _, product := range products.Products {
