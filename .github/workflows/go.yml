@@ -22,13 +22,13 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v3
       with:
-        go-version: '1.18'  # Adjust the Go version as needed
+        go-version: '1.20'  # Adjust the Go version as needed
 
     - name: Check out code
       uses: actions/checkout@v3
 
     - name: Build
-      run: go build -v ./cmd/backend.go
+      run: go build -v ./../cmd/backend.go
       working-directory: backend
 
     - name: Test
